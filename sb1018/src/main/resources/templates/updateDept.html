@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="post" action="/updateDept">
+    <input type="hidden" name="deptno" th:value="${deptno}"/>
+    DNAME: <input type="text" name="dname" value=""/><br>
+    LOC: <input type="text" name="loc" value=""/><br>
+    <button type="submit">확인</button>
+</form>
+</body>
+</html>

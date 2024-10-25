@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>top page</title>
+  <meta http-equiv="Content-Type"
+        content="text/html; charset=UTF-8" />
+  <style>
+    h1 { font-size:18pt; font-weight:bold; color:gray; }
+    body { font-size:13pt; color:gray; margin:5px 25px; }
+    tr { margin:5px; }
+    th { padding: 5px; color: white; background: darkgray; }
+    td { padding: 5px; color: black; background: #e0e0ff;}
+  </style>
+</head>
+<body>
+<table>
+  <th>EMPNO</th>
+  <th>ENAME</th>
+  <th>JOB</th>
+  <th>MGR</th>
+  <th>HIREDATE</th>
+  <th>SAL</th>
+  <th>COMM</th>
+  <th>DEPTNO</th>
+  <th>수정</th>
+  <th>삭제</th>
+  <tr th:each="emp:${emps}">
+    <th th:text="${emp.getEmpno()}">Empno</th>
+    <td th:text="${emp.getEname()}">Ename</td>
+    <td th:text="${emp.getJob()}">Job</td>
+    <td th:text="${emp.getMgr()}">MGR</td>
+    <td th:text="${emp.getHiredate()}">HIREDATE</td>
+    <td th:text="${emp.getSal()}">SAL</td>
+    <td th:text="${emp.getComm()}">COMM</td>
+    <td th:text="${emp.getDeptno()}">Deptno</td>
+    <td><a th:href="@{/updateEmp(empNo = ${emp.getDeptno()})}">수정</a></td>
+    <td><a th:href="@{/edelete(empNo = ${emp.getDeptno()})}">삭제</a></td>
+  </tr>
+</table>
+<a href="/">돌아가기</a> <a href="/insertEmp">사원추가</a>
+</body>
+</html>

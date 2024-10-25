@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>top page</title>
+  <meta http-equiv="Content-Type"
+        content="text/html; charset=UTF-8" />
+  <style>
+    h1 { font-size:18pt; font-weight:bold; color:gray; }
+    body { font-size:13pt; color:gray; margin:5px 25px; }
+    tr { margin:5px; }
+    th { padding: 5px; color: white; background: darkgray; }
+    td { padding: 5px; color: black; background: #e0e0ff;}
+  </style>
+</head>
+<body>
+<table>
+  <th>DEPTNO</th>
+  <th>DNAME</th>
+  <th>LOC</th>
+  <th>상세보가</th>
+  <th>수정</th>
+  <th>삭제</th>
+
+  <tr th:each="dept:${depts}">
+    <th th:text="${dept.getDeptno()}">deptno</th>
+    <td th:text="${dept.getDname()}">dname</td>
+    <td th:text="${dept.getLoc()}">loc</td>
+    <td><a th:href="@{/emp(deptNo = ${dept.getDeptno()})}">상세보기</a></td>
+    <td><a th:href="@{/dupdate(deptNo = ${dept.getDeptno()})}">수정</a></td>
+    <td><a th:href="@{/ddelete(deptNo = ${dept.getDeptno()})}">삭제</a></td>
+  </tr>
+</table>
+<a href="/insertDept">추가</a>
+</body>
+</html>
