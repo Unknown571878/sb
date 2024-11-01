@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http//www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
+
+<div layout:fragment="content">
+<head>
+  <meta charset="UTF-8">
+  <title>아이디 생성</title>
+</head>
+<body>
+
+<div class="container">
+  <h2>아이디 생성</h2>
+  <form action="/register/newMember" method="post" th:object="${Member}">
+    <label for="name">이름:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="email">이메일:</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="password">비밀번호:</label>
+    <input type="password" id="password" name="password" required>
+
+    <label for="confirmPassword">비밀번호 확인:</label>
+    <input type="password" id="confirmPassword" name="confirmPassword" required>
+
+    <input type="submit" value="생성">
+  </form>
+</div>
+
+</body>
+</html>

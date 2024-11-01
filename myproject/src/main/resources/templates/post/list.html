@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http//www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
+
+<div layout:fragment="content">
+<head>
+  <meta charset="UTF-8">
+  <title>게시물 목록</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/list.css}">
+</head>
+<body>
+
+<h1>게시물 목록</h1>
+<table>
+  <thead>
+  <tr>
+    <th>번호</th>
+    <th>제목</th>
+    <th>내용</th>
+    <th>작성자</th>
+    <th>작성일</th>
+    <th>조회수</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:if="${#lists.size(posts)} > 0" th:each="post : ${posts}">
+    <td th:text="${post.pid}"></td>
+    <td class="title"><a href="/post/detail?pid=" th:attrappend="href=${post.pid}" th:text="${post.title}"></a></td>
+    <td th:text="${post.content}"></td>
+    <td th:text="${post.name}"></td>
+    <td th:text="${post.createdAt}"></td>
+    <td th:text="${post.cnt}"></td>
+  </tr>
+  </tbody>
+</table>
+<a href="/post/edit">글쓰기</a>
+<!-- 페이징 -->
+<div th:if="${!posts.isEmpty()}">
+  <!-- 전역 변수 선언 -->
+  <nav
+          th:with="pageNumber = ${posts.pageable.pageNumber}, pageSize = ${posts.pageable.pageSize},totalPages = ${posts.totalPages},startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},tempEndPage = ${startPage + pageSize - 1},endPage = (${tempEndPage < totalPages ? tempEndPage : totalPages})"
+          aria-label="Page navigation"
+  >
+    <ul class="pagination">
+      <!-- 처음으로 이동 -->
+      <li th:classappend="${pageNumber < pageSize} ? 'disabled'" class="page-item">
+        <a class="page-link" th:href="@{/post(page=0)}">
+          <span>&laquo;</span>
+          <span class="sr-only">First</span>
+        </a>
+      </li>
+
+      <!-- 이전으로 이동 -->
+      <li th:classappend="${posts.first} ? 'disabled'" class="page-item">
+        <a class="page-link" th:href="${posts.first} ? '#' : @{/post(page=${pageNumber - 1})}" aria-label="Previous">
+          <span aria-hidden="true">&lt;</span>
+          <span class="sr-only">Previous</span>
+        </a>
+      </li>
+
+      <!-- 특정 페이지로 이동 -->
+      <li th:each="page: ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == pageNumber + 1} ? 'active'" class="page-item">
+        <a th:text="${page}" class="page-link" th:href="@{/post(page=${page - 1})}"></a>
+      </li>
+
+      <!-- 다음으로 이동 -->
+      <li th:classappend="${posts.last} ? 'disabled'" class="page-item">
+        <a class="page-link" th:href="${posts.last} ? '#' : @{/post(page=${pageNumber + 1})}" aria-label="Next">
+          <span aria-hidden="true">&gt;</span>
+          <span class="sr-only">Next</span>
+        </a>
+      </li>
+
+      <!-- 마지막으로 이동 -->
+      <li th:classappend=" ${T(java.lang.Math).floor(totalPages / pageSize) * pageSize - 1 <= startPage} ? 'disabled'" class="page-item">
+        <a class="page-link" th:href="@{/post(page=${totalPages - 1})}">
+          <span>&raquo;</span>
+          <span class="sr-only">Last</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div> <!-- /container -->
+
+
+</body>
+</html>
