@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${#messages.get('login.title')}">Login Title</title>
+</head>
+<body>
+<p th:text="${#messages.get('login.done')}"></p>
+<p>
+    <a th:href="@{/main}">
+        [<span th:text="${#messages.get('go.main')}"></span>]
+    </a>
+</p>
+</body>
+</html>
