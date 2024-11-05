@@ -1,0 +1,99 @@
+/* Google 폰트 적용 */
+body {
+	font-family: 'Noto Sans KR', sans-serif;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	background-color: #f2f4f6;
+}
+
+/* 메인 컨테이너 스타일 */
+.main--container {
+	width: 100%;
+	max-width: 400px;
+	padding: 2rem;
+	background-color: #fff;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	text-align: center;
+}
+
+/* 로그인 폼 스타일 */
+.login--container {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+/* 라벨과 입력 필드 컨테이너 */
+.id--container,
+.pwd--container {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+/* 아이디 및 비밀번호 입력 필드 스타일 */
+.login--id,
+.login--pwd {
+	width: 100%;
+	padding: 0.75rem;
+	border: 1px solid #d1d5db;
+	border-radius: 4px;
+	font-size: 1rem;
+}
+
+.login--id:focus,
+.login--pwd:focus {
+	outline: none;
+	border-color: #3b82f6;
+	box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* 로그인 버튼 스타일 */
+#input--submit {
+	width: 100%;
+	padding: 0.75rem;
+	background-color: #3b82f6;
+	color: white;
+	font-size: 1rem;
+	font-weight: bold;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+#input--submit:hover {
+	background-color: #2563eb;
+}
+
+/* 로그인 정보 링크 스타일 */
+.login--info {
+	list-style-type: none;
+	padding: 0;
+	margin-top: 1rem;
+	display: flex;
+	justify-content: space-around;
+}
+
+.login--info li a {
+	text-decoration: none;
+	color: #3b82f6;
+	font-size: 0.9rem;
+}
+
+.login--info li a:hover {
+	text-decoration: underline;
+}
+
+/* 미디어 쿼리 */
+@media (max-width: 500px) {
+	.main--container {
+		padding: 1.5rem;
+		width: 90%;
+	}
+}
