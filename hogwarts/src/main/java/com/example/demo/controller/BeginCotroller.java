@@ -11,8 +11,10 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -24,18 +26,31 @@ public class BeginCotroller {
     private final UsersRepository usersRepository;
     private final AuthService authService;
 
+    private String showMessageAndRedirect(final MessageDto params, Model model) {
+        model.addAttribute("params", params);
+        return "/common/messageRedirect";
+    }
+
     @GetMapping("/")
     public String index(HttpSession session, Model model) {
-
+        if(session.getAttribute("authInfo") != null) {
+            AuthInfo authInfo = (AuthInfo) session.getAttribute("authInfo");
+            Users users = usersRepository.findById(authInfo.getId());
+            model.addAttribute("user", users);
+        }
         return "main";
     }
 
     @GetMapping("/info/staff")
-    public String info(HttpSession session, Model model) {
-        AuthInfo authInfo = (AuthInfo) session.getAttribute("authInfo");
-        Users users = usersRepository.findById(authInfo.getId());
-        model.addAttribute("user", users);
-
+    public String info(HttpSession session, Model model, HttpServletRequest request) {
+        if(session.getAttribute("authInfo") != null) {
+            AuthInfo authInfo = (AuthInfo) session.getAttribute("authInfo");
+            Users users = usersRepository.findById(authInfo.getId());
+            model.addAttribute("user", users);
+        } else {
+            MessageDto message = new MessageDto("로그인이 필요한 서비스입니다", "/loginForm", RequestMethod.GET, null);
+            return showMessageAndRedirect(message, model);
+        }
         return "/info/staff";
     }
     @GetMapping("/loginForm")

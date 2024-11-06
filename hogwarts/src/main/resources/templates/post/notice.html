@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>공지사항</title>
+  <link rel="stylesheet" href="/css/notice.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+</head>
+<body>
+<div th:replace="/fragments/header.html :: fragment-header"></div>
+<div th:replace="/fragments/nav.html :: fragment-nav"></div>
+
+<!-- 공지사항 목록 페이지 -->
+<div class="content--container">
+  <h2 class="notice">공지사항</h2>
+
+  <div class="table">
+    <table class="table-size">
+      <thead>
+      <tr class="first--tr">
+        <th class="type">번호</th>
+        <th>제목</th>
+        <th>작성일</th>
+        <th class="table-active">상태</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="second--tr" onclick="window.location.href='/notice/read?id=1'">
+        <td>1</td>
+        <td><a href="/notice/read?id=1">[공지] 2024년 봄학기 수업 일정 안내</a></td>
+        <td>2024-03-01</td>
+        <td>발표</td>
+      </tr>
+      <tr class="second--tr" onclick="window.location.href='/notice/read?id=2'">
+        <td>2</td>
+        <td><a href="/notice/read?id=2">[긴급] 서버 점검 안내</a></td>
+        <td>2024-02-28</td>
+        <td>발표</td>
+      </tr>
+      <tr class="second--tr" onclick="window.location.href='/notice/read?id=3'">
+        <td>3</td>
+        <td><a href="/notice/read?id=3">[장학] 2024년 1학기 장학금 신청 안내</a></td>
+        <td>2024-02-25</td>
+        <td>발표</td>
+      </tr>
+      <tr class="second--tr" onclick="window.location.href='/notice/read?id=4'">
+        <td>4</td>
+        <td><a href="/notice/read?id=4">[일반] 2024학년도 입학식 일정 안내</a></td>
+        <td>2024-02-20</td>
+        <td>발표</td>
+      </tr>
+      <tr class="second--tr" onclick="window.location.href='/notice/read?id=5'">
+        <td>5</td>
+        <td><a href="/notice/read?id=5">[일반] 2023년 졸업식 안내</a></td>
+        <td>2024-01-15</td>
+        <td>발표</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 페이지네이션 -->
+  <div class="paging--container">
+    <a href="#" class="button">이전</a>
+    <a href="#" class="button">1</a>
+    <a href="#" class="button">2</a>
+    <a href="#" class="button">3</a>
+    <a href="#" class="button">다음</a>
+  </div>
+</div>
+
+</body>
+</html>

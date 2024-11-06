@@ -16,7 +16,7 @@
           <!-- 공지사항 -->
           <div class="main--page--notice">
             <h3>
-              <a href="/notice">공지사항</a>
+              <a href="/post/notice">공지사항</a>
             </h3>
             <div class="main--page--split"></div>
             <table>
@@ -90,12 +90,12 @@
           </div>
         </div>
       </div>
-      <div>
+      <div th:if="${user != null}">
         <!-- 사용자 간단한 프로필 -->
         <div class="main--page--profile">
           <ul class="d-flex align-items-start" style="margin: 0;">
             <li><span class="material-symbols-rounded" style="margin-top: 2px;">person</span>&nbsp;&nbsp;
-            <li style="font-weight: 600; font-size: 18px;">박성희님,&nbsp;환영합니다.
+            <li style="font-weight: 600; font-size: 18px;" th:text="${user.name + '님, 환영합니다'}">박성희님,&nbsp;환영합니다.
           </ul>
           <hr style="width: 100%;">
 
@@ -104,11 +104,11 @@
           <table>
             <tr>
               <td>이메일</td>
-              <td>sungheepppp@gmail.com</td>
+              <td th:text="${user.email}">sungheepppp@gmail.com</td>
             </tr>
             <tr>
               <td>소속</td>
-              <td>교직원</td>
+              <td th:text="${user.job}"></td>
             </tr>
           </table>
           <div class="profile--button--div">
@@ -129,6 +129,24 @@
             <li style="font-weight: 600; font-size: 18px;">업무 알림
           </ul>
           <p>처리해야 할 업무가 없습니다.</p>
+        </div>
+
+
+      </div>
+
+      <div th:if="${user == null}">
+        <!-- 사용자 간단한 프로필 -->
+        <div class="main--page--profile">
+          <ul class="d-flex align-items-start" style="margin: 0;">
+            <li><span class="material-symbols-rounded" style="margin-top: 2px;">person</span>&nbsp;&nbsp;
+            <li style="font-weight: 600; font-size: 18px;">로그인이 필요한 서비스입니다.</li>
+          </ul>
+          <hr style="width: 100%;">
+
+          <div class="profile--button--div">
+            <a href="/loginForm"><button>로그인</button></a>
+          </div>
+
         </div>
 
 
