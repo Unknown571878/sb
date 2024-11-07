@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>이수한 과목 성적</title>
+  <style>
+
+  </style>
+</head>
+<div th:replace="/fragments/header.html :: fragment-header"></div>
+<body>
+<div th:replace="/fragments/nav.html :: fragment-nav"></div>
+<link rel="stylesheet" href="/css/grade.css">
+
+<div class="container">
+  <h2>이수한 과목 성적</h2>
+
+  <!-- 학년, 학기 선택 -->
+  <div class="semester-select">
+    <select id="yearSelect">
+      <option value="2024">2024</option>
+      <option value="2025">2025</option>
+    </select>
+    <select id="termSelect">
+      <option value="1학기">1학기</option>
+      <option value="2학기">2학기</option>
+    </select>
+  </div>
+
+  <!-- 성적 테이블 -->
+  <div id="subjectsContainer">
+    <!-- 동적으로 과목 성적이 추가됩니다 -->
+  </div>
+
+  <!-- 년도별 학기별 평균 학점 및 평균 점수 -->
+  <div id="yearTermStatisticsContainer">
+    <!-- 년도별 학기별 평균 정보가 여기에 표시됩니다 -->
+  </div>
+</div>
+
+<script>
+  // 성적 데이터
+  const data = [
+    { year: 2024, term: '1학기', subjectCode: 'CS101', subjectName: '자료구조', credit: 3, grade: 'A+', score: 95 },
+    { year: 2024, term: '1학기', subjectCode: 'MATH202', subjectName: '미적분학', credit: 3, grade: 'B', score: 85 },
+    { year: 2024, term: '2학기', subjectCode: 'PHY301', subjectName: '물리학', credit: 4, grade: 'A', score: 90 },
+    { year: 2024, term: '2학기', subjectCode: 'ENG150', subjectName: '영어', credit: 2, grade: 'B+', score: 88 },
+    { year: 2025, term: '1학기', subjectCode: 'BIO101', subjectName: '생물학', credit: 3, grade: 'A', score: 92 },
+    { year: 2025, term: '2학기', subjectCode: 'CHEM201', subjectName: '화학', credit: 4, grade: 'B+', score: 87 }
+  ];
+
+  // 선택된 년도와 학기
+  const yearSelect = document.getElementById("yearSelect");
+  const termSelect = document.getElementById("termSelect");
+
+  // 선택된 학년과 학기에 따른 성적 테이블 표시 함수
+  function displaySubjects() {
+    const selectedYear = yearSelect.value;
+    const selectedTerm = termSelect.value;
+
+    // 선택한 학년과 학기의 성적 필터링
+    const filteredSubjects = data.filter(item => item.year == selectedYear && item.term == selectedTerm);
+
+    // 성적 테이블 생성
+    let tableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>년도</th>
+                            <th>학기</th>
+                            <th>과목 코드</th>
+                            <th>과목명</th>
+                            <th>학점</th>
+                            <th>성적</th>
+                            <th>점수</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+    filteredSubjects.forEach(subject => {
+      tableHTML += `
+                    <tr>
+                        <td>${subject.year}</td>
+                        <td>${subject.term}</td>
+                        <td>${subject.subjectCode}</td>
+                        <td>${subject.subjectName}</td>
+                        <td>${subject.credit}</td>
+                        <td>${subject.grade}</td>
+                        <td>${subject.score}</td>
+                    </tr>
+                `;
+    });
+
+    tableHTML += `</tbody></table>`;
+
+    // 테이블을 동적으로 업데이트
+    const subjectsContainer = document.getElementById("subjectsContainer");
+    subjectsContainer.innerHTML = tableHTML;
+  }
+
+  // 년도별 학기별 평균 학점 및 평균 점수 계산 함수
+  function calculateYearTermStatistics() {
+    // 년도별, 학기별로 그룹화된 데이터 생성
+    const yearTermStats = {};
+
+    data.forEach(subject => {
+      const yearTermKey = `${subject.year}-${subject.term}`;
+      if (!yearTermStats[yearTermKey]) {
+        yearTermStats[yearTermKey] = { totalCredits: 0, totalScore: 0, count: 0 };
+      }
+      yearTermStats[yearTermKey].totalCredits += subject.credit;
+      yearTermStats[yearTermKey].totalScore += subject.score;
+      yearTermStats[yearTermKey].count += 1;
+    });
+
+    // 년도별 학기별 평균 계산
+    let yearTermTableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>년도-학기</th>
+                            <th>평균 학점</th>
+                            <th>평균 점수</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+    for (let yearTerm in yearTermStats) {
+      const avgCredit = (yearTermStats[yearTerm].totalCredits / yearTermStats[yearTerm].count).toFixed(2);
+      const avgScore = (yearTermStats[yearTerm].totalScore / yearTermStats[yearTerm].count).toFixed(2);
+
+      yearTermTableHTML += `
+                    <tr>
+                        <td>${yearTerm}</td>
+                        <td>${avgCredit}</td>
+                        <td>${avgScore}</td>
+                    </tr>
+                `;
+    }
+
+    yearTermTableHTML += `</tbody></table>`;
+
+    // 테이블을 동적으로 업데이트
+    const yearTermStatisticsContainer = document.getElementById("yearTermStatisticsContainer");
+    yearTermStatisticsContainer.innerHTML = yearTermTableHTML;
+  }
+
+  // 페이지 로드시 첫 번째 선택에 대한 성적을 보여줍니다
+  displaySubjects();
+  calculateYearTermStatistics();
+
+  // 선택 변경 시 성적과 평균 업데이트
+  yearSelect.addEventListener("change", () => {
+    displaySubjects();
+    calculateYearTermStatistics();
+  });
+
+  termSelect.addEventListener("change", () => {
+    displaySubjects();
+    calculateYearTermStatistics();
+  });
+</script>
+
+</body>
+</html>

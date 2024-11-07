@@ -1,0 +1,80 @@
+
+.calendar-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 120px; /* 네비게이션 바 높이 + 여백 */
+    padding-top: 20px;
+}
+
+/* 캘린더 컨테이너 스타일 */
+.calendar-container {
+    width: 800px; /* 캘린더 너비 */
+    padding: 20px;
+    background-color: #ffffff;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* 캘린더 헤더 */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendar-header select {
+    font-size: 1em;
+    padding: 5px;
+}
+
+/* 요일 표시 스타일 */
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    font-weight: bold;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+}
+
+/* 날짜 그리드 스타일 */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.calendar-day {
+    position: relative;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    min-height: 80px;
+    background-color: #fafafa;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    font-size: 1em;
+}
+
+/* 날짜 숫자 위치 */
+.calendar-day::before {
+    content: attr(data-day);
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 이전 달/다음 달의 날짜 스타일 */
+.calendar-day.extra {
+    color: #aaa;
+    background-color: #f0f0f0;
+}

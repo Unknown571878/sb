@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>성적 입력</title>
+  <link rel="stylesheet" href="/css/gradeInput.css">
+</head>
+<div th:replace="/fragments/header.html :: fragment-header"></div>
+<body>
+<div th:replace="/fragments/nav.html :: fragment-nav"></div>
+
+<div class="form-container">
+  <h1>성적 입력</h1>
+  <hr>
+  <form action="/submit-grades" method="POST">
+
+    <!-- 과목 선택 셀렉트 박스 추가 -->
+    <div class="subject-selection">
+      <label for="subject">담당 과목:</label>
+      <select name="subject" id="subject" required>
+        <option value="" disabled selected>과목을 선택하세요</option>
+        <option value="컴퓨터공학">컴퓨터공학</option>
+        <option value="수학">수학</option>
+        <option value="물리학">물리학</option>
+        <option value="화학">화학</option>
+        <!-- 필요한 과목을 추가 -->
+      </select>
+    </div>
+
+    <table class="student-table">
+      <thead>
+      <tr>
+        <th>번호</th>
+        <th>학생 이름</th>
+        <th>학번</th>
+        <th>성적</th>
+      </tr>
+      </thead>
+      <tbody>
+      <!-- 반복문으로 학생 목록을 표시 -->
+      <tr>
+        <td>1</td>
+        <td>홍길동</td>
+        <td>20190001</td>
+        <td><input type="text" name="grade_1" required></td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>김철수</td>
+        <td>20190002</td>
+        <td><input type="text" name="grade_2" required></td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>박영희</td>
+        <td>20190003</td>
+        <td><input type="text" name="grade_3" required></td>
+      </tr>
+      <!-- 추가 학생들 -->
+      <tr>
+        <td>4</td>
+        <td>최강민</td>
+        <td>20190004</td>
+        <td><input type="text" name="grade_4" required></td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="form-actions">
+      <button type="submit" class="submit-btn">성적 입력 완료</button>
+    </div>
+  </form>
+</div>
+
+</body>
+</html>

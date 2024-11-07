@@ -19,10 +19,13 @@ public class Grade {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long gId;
-    private float kor;
-    private float math;
-    private float eng;
-    private float total;
-    private float avg;
+    private Long gid;
+    private String id;
+    private String years;
+    private String term;
+    private int code;
+    private String subject;
+    private int credit;
+    private String grade;
+    private float score;
 }

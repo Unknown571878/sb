@@ -1,8 +1,8 @@
  @charset "UTF-8";
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
-.split--div {
-	margin: 20px 0 20px;
-}
+ .split--div {
+	 margin: 20px 0 20px;
+ }
 .table--container {
 	width: 500px;
 	border: 1px solid #D2D1D1;

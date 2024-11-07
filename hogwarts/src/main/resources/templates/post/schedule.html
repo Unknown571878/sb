@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>일정</title>
+</head>
+<div th:replace="/fragments/header.html :: fragment-header"></div>
+<body>
+<div th:replace="/fragments/nav.html :: fragment-nav"></div>
+<link rel="stylesheet" href="/css/schedule.css">
+<div class="calendar-container">
+  <div class="calendar-header">
+    <h2 id="calendarTitle">2024년 1월</h2>
+    <select id="monthSelector" onchange="updateCalendar()">
+      <option value="0">1월</option>
+      <option value="1">2월</option>
+      <option value="2">3월</option>
+      <option value="3">4월</option>
+      <option value="4">5월</option>
+      <option value="5">6월</option>
+      <option value="6">7월</option>
+      <option value="7">8월</option>
+      <option value="8">9월</option>
+      <option value="9">10월</option>
+      <option value="10">11월</option>
+      <option value="11">12월</option>
+    </select>
+  </div>
+
+  <!-- 요일 표시 -->
+  <div class="calendar-weekdays">
+    <div>일</div>
+    <div>월</div>
+    <div>화</div>
+    <div>수</div>
+    <div>목</div>
+    <div>금</div>
+    <div>토</div>
+  </div>
+
+  <!-- 날짜 그리드 -->
+  <div class="calendar-grid" id="calendarGrid">
+    <!-- 날짜가 표시될 공간 -->
+</div>
+</div>
+
+<script>
+  const calendarGrid = document.getElementById('calendarGrid');
+  const calendarTitle = document.getElementById('calendarTitle');
+  const monthSelector = document.getElementById('monthSelector');
+  const currentYear = new Date().getFullYear();
+
+  function updateCalendar() {
+    const month = parseInt(monthSelector.value);
+    const firstDayOfMonth = new Date(currentYear, month, 1).getDay();
+    const daysInMonth = new Date(currentYear, month + 1, 0).getDate();
+    const daysInPrevMonth = new Date(currentYear, month, 0).getDate();
+
+    calendarTitle.textContent = `${currentYear}년 ${month + 1}월`;
+
+    calendarGrid.innerHTML = '';
+
+    // 이전 달의 마지막 며칠 추가 (불투명 처리)
+    for (let i = firstDayOfMonth - 1; i >= 0; i--) {
+      const dayDiv = document.createElement('div');
+      dayDiv.className = 'calendar-day extra';
+      dayDiv.textContent = daysInPrevMonth - i;
+      calendarGrid.appendChild(dayDiv);
+    }
+
+    // 현재 월 날짜 추가
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dayDiv = document.createElement('div');
+      dayDiv.className = 'calendar-day';
+      dayDiv.textContent = day;
+      calendarGrid.appendChild(dayDiv);
+    }
+
+    // 다음 달의 첫 며칠 추가 (불투명 처리)
+    const totalCells = firstDayOfMonth + daysInMonth;
+    const extraDays = 7 - (totalCells % 7);
+
+    if (extraDays < 7) {
+      for (let i = 1; i <= extraDays; i++) {
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'calendar-day extra';
+        dayDiv.textContent = i;
+        calendarGrid.appendChild(dayDiv);
+      }
+    }
+  }
+
+  updateCalendar();
+</script>
+
+</body>
+</html>

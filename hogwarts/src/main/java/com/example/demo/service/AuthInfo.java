@@ -12,6 +12,7 @@ public class AuthInfo {
 	private Long aid;
 	private String id;
 	private String name;
+	private String job;
 
 
 

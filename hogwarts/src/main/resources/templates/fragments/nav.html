@@ -24,12 +24,19 @@
             <nav class="main--menu">
                 <a href="/"><img class="logo" alt="" src="/images/logo.png"></a>
                 <!-- userRole에 따라 메뉴 다르게 표시 -->
-                <ul>
+                <ul th:if="${!#lists.isEmpty(session.authInfo)}">
                     <li><a href="/">홈</a>
                     <li><a href="/info/staff">MY</a>
-                    <li><a href="/users/studentList">회원관리</a>
+                    <li th:if="${session.authInfo.job.equals('학생')}"><a href="/info/grade">성적</a>
+                    <li th:if="${session.authInfo.job.equals('교직원')}"><a href="/info/gradeInput">성적</a>
                     <li><a href="/admin/college">등록</a>
-                    <li><a href="/notice">회원정보</a>
+                    <li><a href="/post/postList">게시판</a>
+                </ul>
+                <ul th:if="${#lists.isEmpty(session.authInfo)}">
+                    <li><a href="/">홈</a>
+                    <li><a href="/info/staff">MY</a>
+                    <li><a href="/user/ser">성적</a>
+                    <li><a href="/admin/college">등록</a>
                     <li><a href="/post/postList">게시판</a>
                 </ul>
             </nav>

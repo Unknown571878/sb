@@ -44,6 +44,8 @@ public class Users {
 
     private String job;
 
+    private String department;
+
     private Long gId;
 
     public boolean matchPassword(String password) {

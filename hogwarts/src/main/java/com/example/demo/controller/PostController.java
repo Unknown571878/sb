@@ -42,4 +42,9 @@ public class PostController {
         log.info(page.toString());
         return "/post/postList";
     }
+
+    @GetMapping("/schedule")
+    public String schedule() {
+        return "/post/schedule";
+    }
 }

@@ -39,20 +39,12 @@ public class HogwartsApplication {
                 .hireDate(LocalDate.now())
                 .birthDate(LocalDate.parse("1995-09-03"))
                 .email("hong@korea.com")
+                .department("컴퓨터소프트웨어")
                 .gender("남성")
                 .password("1234")
                 .name("홍길동")
                 .gId(1L)
                 .build();
-        Grade grade = Grade.builder()
-                .kor(85.7F)
-                .math(80.2f)
-                .eng(92.1f)
-                .total(258)
-                .avg(86)
-                .build();
-
-        gradeRepository.save(grade);
         usersRepository.save(users);
 
         IntStream.range(0, 300).forEach(i -> {

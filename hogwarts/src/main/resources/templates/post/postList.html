@@ -7,7 +7,9 @@
     <title>게시물 목록</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/list.css}">
   </head>
-  <body>
+<body>
+<div th:replace="/fragments/header.html :: fragment-header"></div>
+<div th:replace="/fragments/nav.html :: fragment-nav"></div>
 
   <h1>게시물 목록</h1>
   <table>

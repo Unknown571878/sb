@@ -53,6 +53,17 @@ public class BeginCotroller {
         }
         return "/info/staff";
     }
+
+    @GetMapping("/info/password")
+    public String password() {
+        return "/info/password";
+    }
+
+    @GetMapping("/info/grade")
+    public String grade() {
+        return "/info/grade";
+    }
+
     @GetMapping("/loginForm")
     public String loginForm() {
         return "/loginForm";
@@ -90,5 +101,10 @@ public class BeginCotroller {
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/";
+    }
+
+    @GetMapping("/info/gradeInput")
+    public String gradeInput(Model model) {
+        return "/info/gradeInput";
     }
 }
