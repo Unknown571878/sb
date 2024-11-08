@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -44,7 +45,11 @@ public class PostController {
     }
 
     @GetMapping("/schedule")
-    public String schedule() {
+    public String schedule(Model model) {
+        LocalDate now = LocalDate.now();
+        int getMonth = now.getMonth().getValue();
+        String month = getMonth + "월";
+        model.addAttribute("month", month);
         return "/post/schedule";
     }
 }

@@ -12,7 +12,7 @@ body {
 
 /* 메인 컨테이너 스타일 */
 .main--container {
-	width: 100%;
+	width: 1000px;
 	max-width: 400px;
 	padding: 2rem;
 	background-color: #fff;
@@ -39,7 +39,7 @@ body {
 /* 아이디 및 비밀번호 입력 필드 스타일 */
 .login--id,
 .login--pwd {
-	width: 100%;
+	width: 94%;
 	padding: 0.75rem;
 	border: 1px solid #d1d5db;
 	border-radius: 4px;

@@ -5,7 +5,7 @@
             <div class="header--top" th:if="${!#lists.isEmpty(session.authInfo)}">
                 <ul>
                     <li class="material--li"><span class="material-symbols-outlined">account_circle</span>
-                    <li th:text="${session.authInfo.name}">박성희님 (230001)
+                    <li th:text="${session.authInfo.name  + '(' + session.authInfo.id + ')'}">박성희님 (230001)
                     <li style="margin: 0 15px;">ㅣ
                     <li class="material--li"><span style="color: #9BD2EC;" class="material-symbols-outlined">logout</span>
                     <li><a href="/logout">로그아웃</a>
@@ -30,14 +30,14 @@
                     <li th:if="${session.authInfo.job.equals('학생')}"><a href="/info/grade">성적</a>
                     <li th:if="${session.authInfo.job.equals('교직원')}"><a href="/info/gradeInput">성적</a>
                     <li><a href="/admin/college">등록</a>
-                    <li><a href="/post/postList">게시판</a>
+                    <li><a href="/post/notice">게시판</a>
                 </ul>
                 <ul th:if="${#lists.isEmpty(session.authInfo)}">
                     <li><a href="/">홈</a>
                     <li><a href="/info/staff">MY</a>
                     <li><a href="/user/ser">성적</a>
                     <li><a href="/admin/college">등록</a>
-                    <li><a href="/post/postList">게시판</a>
+                    <li><a href="/post/notice">게시판</a>
                 </ul>
             </nav>
         </header>

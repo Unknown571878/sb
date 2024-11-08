@@ -11,10 +11,33 @@
 <div th:replace="/fragments/header.html :: fragment-header"></div>
 <div th:replace="/fragments/nav.html :: fragment-nav"></div>
 
+<div class="d-flex justify-content-center align-items-start" style="min-width: 100em;">
+
+  <div class="sub--menu">
+    <div class="sub--menu--top">
+      <h2>게시판</h2>
+    </div>
+    <!-- 메뉴 -->
+    <!-- 선택된 메뉴에 class="selected--menu" 추가해주세요 -->
+    <div class="sub--menu--mid">
+      <table class="sub--menu--table" border="1">
+        <tr>
+          <td><a href="/post/notice">공지사항</a></td>
+        </tr>
+        <tr>
+          <td><a href="/post/postList" class="selected--menu">자유게시판</a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+<div class="post-form">
+  <div class="main-title">
   <h1>게시물 목록</h1>
-  <table>
+  <div class="split--div-post"></div>
+  </div>
+  <table class="post-table">
     <thead>
-    <tr>
+    <tr class="post-tbody-tr">
       <th>번호</th>
       <th>제목</th>
       <th>작성자</th>
@@ -22,8 +45,8 @@
       <th>조회수</th>
     </tr>
     </thead>
-    <tbody>
-    <tr th:if="${#lists.size(posts)} > 0" th:each="post : ${posts}">
+    <tbody class="post-tbody-tr">
+    <tr class="post-tbody-tr" th:if="${#lists.size(posts)} > 0" th:each="post : ${posts}">
       <td th:text="${post.pid}"></td>
       <td class="title"><a href="/post/detail?pid=" th:attrappend="href=${post.pid}" th:text="${post.title}"></a></td>
       <td th:text="${post.name}"></td>
@@ -32,7 +55,11 @@
     </tr>
     </tbody>
   </table>
-  <a href="/post/edit">글쓰기</a>
+  <div class="write-button-div">
+  <a href="/post/edit" class="write-button">글쓰기</a>
+  </div>
+
+
   <!-- 페이징 -->
   <div th:if="${!posts.isEmpty()}">
     <!-- 전역 변수 선언 -->
@@ -80,7 +107,8 @@
       </ul>
     </nav>
   </div> <!-- /container -->
-
+</div>
+</div>
 
   </body>
 </html>
