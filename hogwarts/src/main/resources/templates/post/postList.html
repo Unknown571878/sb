@@ -30,7 +30,9 @@
       </table>
     </div>
   </div>
+
 <div class="post-form">
+
   <div class="main-title">
   <h1>게시물 목록</h1>
   <div class="split--div-post"></div>
@@ -48,7 +50,7 @@
     <tbody class="post-tbody-tr">
     <tr class="post-tbody-tr" th:if="${#lists.size(posts)} > 0" th:each="post : ${posts}">
       <td th:text="${post.pid}"></td>
-      <td class="title"><a href="/post/detail?pid=" th:attrappend="href=${post.pid}" th:text="${post.title}"></a></td>
+      <td class="title"><a href="/post/postDetail?pid=" th:attrappend="href=${post.pid}" th:text="${post.title}"></a></td>
       <td th:text="${post.name}"></td>
       <td th:text="${post.createdAt}"></td>
       <td th:text="${post.cnt}"></td>
@@ -56,7 +58,7 @@
     </tbody>
   </table>
   <div class="write-button-div">
-  <a href="/post/edit" class="write-button">글쓰기</a>
+  <a href="/post/postInsertForm" class="write-button">글쓰기</a>
   </div>
 
 

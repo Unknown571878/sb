@@ -2,18 +2,21 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Post;
 import com.example.demo.reopository.PostRepository;
+import com.example.demo.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -23,6 +26,8 @@ import java.util.List;
 public class PostController {
 
     private final PostRepository postRepository;
+
+    private final PostService postService;
 
     @GetMapping("/notice")
     public String notice() {
@@ -51,5 +56,42 @@ public class PostController {
         String month = getMonth + "월";
         model.addAttribute("month", month);
         return "/post/schedule";
+    }
+
+    @GetMapping("/postInsertForm")
+    public String postInsertForm() {
+        return "/post/postInsertForm";
+    }
+
+    @PostMapping("/postInsert")
+    public String postInsert(@ModelAttribute Post post, HttpSession session) {
+
+        log.info(post.toString());
+
+        Post newPost = Post.builder()
+                .title(post.getTitle())
+                .content(post.getContent())
+                .createdAt(LocalDateTime.now())
+                .cnt(0)
+                .name("admin")
+                .build();
+        postRepository.save(newPost);
+
+        return "redirect:/postList";
+    }
+
+    @GetMapping("/postDetail")
+    public String postDetail(@RequestParam("pid") Long pid, Model model) {
+        Post post = postRepository.findById(pid).orElse(null);
+        model.addAttribute("post", post);
+        log.info(post.toString());
+        return "/post/postDetail";
+    }
+
+    @PostMapping("/{pid}/commentAdd")
+    public String addComment(@PathVariable Long pid, @RequestParam String content) {
+        // 댓글 추가 로직
+        postService.addCommentToPost(pid, content);
+        return "redirect:/post/postList?pid=" + pid; // 댓글 작성 후 다시 게시글 상세보기로 리다이렉트
     }
 }
