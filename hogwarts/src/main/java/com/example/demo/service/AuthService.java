@@ -23,7 +23,7 @@ public class AuthService {
 		if (!member.matchPassword(password)) {
 			throw new WrongIdPasswordException();
 		}
-		return new AuthInfo(member.getSId(),
+		return new AuthInfo(member.getUId(),
 				member.getId(),
 				member.getName(),
 				member.getJob());

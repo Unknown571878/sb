@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 public class AuthInfo {
 
-	private Long aid;
+	private Long uid;
 	private String id;
 	private String name;
 	private String job;

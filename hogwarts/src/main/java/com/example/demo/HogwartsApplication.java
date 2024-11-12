@@ -54,6 +54,7 @@ public class HogwartsApplication {
                     .content("내용" + i)
                     .cnt(0)
                     .name("admin")
+                    .userid(0L)
                     .build();
             postRepository.save(postList);
         });

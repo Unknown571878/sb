@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,56 +28,70 @@
     </div>
   </div>
   <div class="post-detail-main">
-<div class="container">
-  <div class="main-title">
-    <h1>게시글</h1>
-    <div class="split--div-post"></div>
-  </div>
+    <div class="container">
+      <!-- 게시글 내용 표시 -->
+      <div class="post-detail">
+        <h2 th:text="${post.title}">제목</h2>
+        <p class="post-meta">
+          <span th:text="'작성자: ' + ${post.name}">작성자</span> |
+          <span th:text="'작성일: ' + ${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss')}">작성일</span>
+        </p>
+        <div class="post-content">
+          <p th:text="${post.content}">게시글 내용</p>
+        </div>
 
-  <!-- 게시글 내용 표시 -->
-  <div class="post-detail">
-    <h2 th:text="${post.title}">제목</h2>
-    <p class="post-meta">
-      <span th:text="'작성자: ' + ${post.name}">작성자</span> |
-      <span th:text="'작성일: ' + ${post.createdAt}">작성일</span>
-    </p>
-    <div class="post-content">
-      <p th:text="${post.content}">게시글 내용</p>
+        <!-- 댓글 목록 -->
+        <div class="comments-section">
+          <h3>댓글</h3>
+          <ul>
+            <li th:each="comment : ${post.comments}">
+              <p>
+                <strong th:text="${comment.name + '(' + comment.authorId + ')'}">작성자</strong> |
+                <span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm:ss')}">작성일</span>
+              </p>
+              <p th:text="${comment.content}">댓글 내용</p>
+
+              <div class="comment-actions" th:if="${session.authInfo.uid.equals(comment.userId)}">
+                <!-- 수정 버튼 -->
+                <a href="#" th:href="@{/post/{pid}/commentEdit(pid=${post.pid}, cid=${comment.id})}">수정</a>
+
+                <!-- 삭제 버튼 -->
+                <form th:action="@{/post/{pid}/commentDelete(pid=${post.pid}, cid=${comment.id})}" method="POST" style="display:inline;">
+                  <button type="submit" onclick="return confirm('댓글을 삭제하시겠습니까?');">삭제</button>
+                </form>
+              </div>
+            </li>
+          </ul>
+
+          <!-- 댓글 작성 폼 -->
+          <form class="comments-section-form" th:action="@{/post/{pid}/commentAdd(pid=${post.pid})}" method="POST">
+            <label for="comment">댓글 작성</label>
+            <textarea name="content" id="comment" rows="3" required></textarea>
+            <input type="hidden" name="name" id="name" th:value="${session.authInfo.name}">
+            <input type="hidden" name="id" id="id" th:value="${session.authInfo.id}">
+            <input type="hidden" name="uid" id="uid" th:value="${session.authInfo.uid}">
+            <button type="submit">댓글 작성</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- 게시글 수정, 삭제, 목록으로 돌아가기 버튼 -->
+      <div class="form-actions" th:if="${session.authInfo.uid.equals(post.userid)}">
+        <button onclick="window.location.href='/post/postList';">목록으로 돌아가기</button>
+        <form th:action="@{/post/postInsertForm/{pid}(pid=${post.pid})}" method="POST">
+          <button type="submit">수정</button>
+        </form>
+        <form th:action="@{/post/postDelete/{pid}(pid=${post.pid})}" method="POST" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+          <button type="submit">삭제</button>
+        </form>
+      </div>
+
+      <div class="form-actions" th:if="${!session.authInfo.uid.equals(post.userid)}">
+        <button onclick="window.location.href='/post/postList';">목록으로 돌아가기</button>
+      </div>
+
     </div>
-
-<!--    &lt;!&ndash; 첨부파일이 있을 경우 (Optional) &ndash;&gt;-->
-<!--    <div th:if="${post.file != null}">-->
-<!--      <h3>첨부 파일</h3>-->
-<!--      <a th:href="@{'/files/' + ${post.file.name}}" th:text="${post.file.name}">파일 다운로드</a>-->
-<!--    </div>-->
-
-<!--     댓글 목록-->
-    <div class="comments-section">
-      <h3>댓글</h3>
-      <ul>
-        <li th:each="comment : ${post.comments}">
-          <p><strong th:text="${comment.name}">작성자</strong> : <span th:text="${comment.content}">댓글 내용</span></p>
-        </li>
-      </ul>
-
-<!--       댓글 작성 폼-->
-      <form th:action="@{/post/{pid}/commentAdd(pid=${post.pid})}" method="POST">
-
-      <label for="comment">댓글 작성</label>
-        <textarea name="content" id="comment" rows="3" required></textarea>
-        <button type="submit">댓글 작성</button>
-      </form>
-    </div>
   </div>
-
-  <!-- 게시글 수정, 삭제, 목록으로 돌아가기 버튼 -->
-  <div class="form-actions">
-    <button onclick="window.location.href='/post/postList';">목록으로 돌아가기</button>
-    <button onclick="window.location.href='@{/post/{pid}/edit(pid=${post.pid})}';">수정</button>
-    <button onclick="if(confirm('정말 삭제하시겠습니까?')) window.location.href='@{/post/{pid}/delete(pid=${post.pid})}';">삭제</button>
-  </div>
-</div>
-</div>
 </div>
 </body>
 </html>

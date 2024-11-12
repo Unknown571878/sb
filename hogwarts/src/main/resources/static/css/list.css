@@ -33,6 +33,7 @@ h1 {
 }
 
 thead th {
+    text-align: center;
     background-color: #f7f7f7;
     padding: 10px;
     font-weight: bold;

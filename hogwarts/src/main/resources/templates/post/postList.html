@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
-<div th:replace="/fragments/header.html :: fragment-header"></div>
   <head>
     <meta charset="UTF-8">
     <title>게시물 목록</title>
@@ -52,7 +50,7 @@
       <td th:text="${post.pid}"></td>
       <td class="title"><a href="/post/postDetail?pid=" th:attrappend="href=${post.pid}" th:text="${post.title}"></a></td>
       <td th:text="${post.name}"></td>
-      <td th:text="${post.createdAt}"></td>
+      <td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
       <td th:text="${post.cnt}"></td>
     </tr>
     </tbody>

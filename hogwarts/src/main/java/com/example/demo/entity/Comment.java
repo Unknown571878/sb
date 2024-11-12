@@ -1,11 +1,15 @@
 package com.example.demo.entity;
 
+import com.example.demo.entity.Post;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Builder
@@ -18,12 +22,28 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // 댓글 ID
 
+    private Long userId;
     private String name; // 댓글 작성자 이름
-
     private String content; // 댓글 내용
+    private String authorId; // 댓글 작성자 ID 추가
 
-    // 댓글이 속한 게시글과의 관계
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdAt; // 댓글 작성 시간 추가
+
     @ManyToOne
-    @JoinColumn(name = "post_id") // 외래 키로 post_id 사용
-    private Post post; // 해당 댓글이 속한 게시글
+    @JoinColumn(name = "post_id")
+    @JsonBackReference
+    private Post post;
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", content='" + content + '\'' +
+                ", authorId=" + authorId +
+                ", createdAt=" + createdAt +
+                ", userId=" + userId +
+                '}';
+    }
 }

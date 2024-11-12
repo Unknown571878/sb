@@ -8,10 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -106,5 +103,29 @@ public class BeginCotroller {
     @GetMapping("/info/gradeInput")
     public String gradeInput(Model model) {
         return "/info/gradeInput";
+    }
+
+    @PostMapping("/info/newPassword")
+    public String newPassword(@RequestParam String password, @RequestParam Long uid, Model model) {
+        Users user = usersRepository.findById(uid).orElse(null);
+        if(password.equals(user.getPassword())) {
+            return "/info/newPassword";
+        } else {
+            MessageDto message = new MessageDto("비밀번호가 다릅니다.", "/info/password", RequestMethod.GET, null);
+            return showMessageAndRedirect(message, model);
+        }
+    }
+
+    @PostMapping("/info/newPasswordInsert")
+    public String newPasswordInsert(@RequestParam String newPassword, @RequestParam String passwordConfirm, @RequestParam Long uid, Model model) {
+        if (newPassword.equals(passwordConfirm)) {
+            Users user = usersRepository.findById(uid).orElse(null);
+            user.setPassword(newPassword);
+            usersRepository.save(user);
+        } else {
+            MessageDto message = new MessageDto("비밀번호가 일치하지 않습니다", "/info/newPasswordInsert", RequestMethod.GET, null);
+            return showMessageAndRedirect(message, model);
+        }
+        return "/";
     }
 }

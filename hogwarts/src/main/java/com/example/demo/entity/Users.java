@@ -21,7 +21,7 @@ public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long sId;
+    private Long uId;
 
     private String id;
 

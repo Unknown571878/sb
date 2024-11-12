@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Post;
 import com.example.demo.reopository.PostRepository;
+import com.example.demo.service.MessageDto;
 import com.example.demo.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,11 @@ public class PostController {
     private final PostRepository postRepository;
 
     private final PostService postService;
+
+    private String showMessageAndRedirect(final MessageDto params, Model model) {
+        model.addAttribute("params", params);
+        return "/common/messageRedirect";
+    }
 
     @GetMapping("/notice")
     public String notice() {
@@ -62,6 +68,12 @@ public class PostController {
     public String postInsertForm() {
         return "/post/postInsertForm";
     }
+    @PostMapping("/postInsertForm/{pid}")
+    public String postInsertForm(@PathVariable Long pid, Model model) {
+        Post post = postRepository.findById(pid).orElse(null);
+        model.addAttribute("post", post);
+        return "/post/postInsertForm";
+    }
 
     @PostMapping("/postInsert")
     public String postInsert(@ModelAttribute Post post, HttpSession session) {
@@ -73,25 +85,47 @@ public class PostController {
                 .content(post.getContent())
                 .createdAt(LocalDateTime.now())
                 .cnt(0)
-                .name("admin")
+                .name(post.getName())
+                .userid(post.getUserid())
                 .build();
         postRepository.save(newPost);
 
-        return "redirect:/postList";
+        return "redirect:/post/postList";
     }
 
     @GetMapping("/postDetail")
     public String postDetail(@RequestParam("pid") Long pid, Model model) {
         Post post = postRepository.findById(pid).orElse(null);
+        int cntUp = post.getCnt() + 1;
+        post.setCnt(cntUp);
+        postRepository.save(post);
         model.addAttribute("post", post);
-        log.info(post.toString());
         return "/post/postDetail";
     }
 
     @PostMapping("/{pid}/commentAdd")
-    public String addComment(@PathVariable Long pid, @RequestParam String content) {
+    public String addComment(@PathVariable Long pid, @RequestParam String content, @RequestParam String name, @RequestParam String id,
+                             @RequestParam Long uid) {
         // 댓글 추가 로직
-        postService.addCommentToPost(pid, content);
-        return "redirect:/post/postList?pid=" + pid; // 댓글 작성 후 다시 게시글 상세보기로 리다이렉트
+        postService.addCommentToPost(pid, id, name ,content, uid);
+        return "redirect:/post/postDetail?pid=" + pid; // 댓글 작성 후 다시 게시글 상세보기로 리다이렉트
+    }
+
+    @PostMapping("/postDelete/{pid}")
+    public String postDelete(@PathVariable Long pid, Model model) {
+        postService.deletePost(pid);
+        MessageDto message = new MessageDto("삭제가 완료되었습니다", "/post/postList", RequestMethod.GET, null);
+        return showMessageAndRedirect(message, model);
+    }
+
+    @PostMapping("/postUpdate")
+    public String postUpdate(@ModelAttribute Post post, Model model) {
+        Post updatePost = postRepository.findById(post.getPid()).orElse(null);
+        updatePost.setTitle(post.getTitle());
+        updatePost.setContent(post.getContent());
+        updatePost.setPid(post.getPid());
+        postRepository.save(updatePost);
+        MessageDto message = new MessageDto("수정되었습니다", "/post/postList", RequestMethod.GET, null);
+        return showMessageAndRedirect(message, model);
     }
 }
