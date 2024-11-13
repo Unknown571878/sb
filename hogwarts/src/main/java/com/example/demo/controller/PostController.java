@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Comment;
 import com.example.demo.entity.Post;
+import com.example.demo.reopository.CommentRepository;
 import com.example.demo.reopository.PostRepository;
 import com.example.demo.service.MessageDto;
 import com.example.demo.service.PostService;
@@ -29,6 +31,8 @@ public class PostController {
     private final PostRepository postRepository;
 
     private final PostService postService;
+
+    private final CommentRepository commentRepository;
 
     private String showMessageAndRedirect(final MessageDto params, Model model) {
         model.addAttribute("params", params);
@@ -126,6 +130,21 @@ public class PostController {
         updatePost.setPid(post.getPid());
         postRepository.save(updatePost);
         MessageDto message = new MessageDto("수정되었습니다", "/post/postList", RequestMethod.GET, null);
+        return showMessageAndRedirect(message, model);
+    }
+    @PostMapping("/{pid}/commentDelete")
+    public String commentDelete(@PathVariable Long pid, Long cid, Model model) {
+        commentRepository.deleteById(cid);
+        MessageDto message = new MessageDto("삭제되었습니다.", "/post/postDetail?pid=" + pid, RequestMethod.GET, null);
+        return showMessageAndRedirect(message, model);
+    }
+    @PostMapping("/commentUpdate")
+    public String commentUpdate(@RequestParam String updateComment, @RequestParam Long pid,
+                                @RequestParam Long cid, Model model) {
+        Comment update = commentRepository.findById(cid).orElse(null);
+        update.setContent(updateComment);
+        commentRepository.save(update);
+        MessageDto message = new MessageDto("수정되었습니다", "/post/postDetail?pid=" + pid, RequestMethod.GET, null);
         return showMessageAndRedirect(message, model);
     }
 }

@@ -122,10 +122,33 @@ public class BeginCotroller {
             Users user = usersRepository.findById(uid).orElse(null);
             user.setPassword(newPassword);
             usersRepository.save(user);
+            MessageDto message = new MessageDto("비밀번호가 변경되었습니다.", "/", RequestMethod.GET, null);
+            return showMessageAndRedirect(message, model);
         } else {
-            MessageDto message = new MessageDto("비밀번호가 일치하지 않습니다", "/info/newPasswordInsert", RequestMethod.GET, null);
+            MessageDto message = new MessageDto("비밀번호가 일치하지 않습니다.", "/info/newPassword", RequestMethod.GET, null);
             return showMessageAndRedirect(message, model);
         }
-        return "/";
     }
+
+    @GetMapping("/InfoUpdateForm")
+    public String update(HttpSession session, Model model) {
+        AuthInfo authInfo = (AuthInfo) session.getAttribute("authInfo");
+        Users users = usersRepository.findById(authInfo.getId());
+        model.addAttribute("user", users);
+        return "/info/updateInfoForm";
+    }
+
+    @PostMapping("/InfoUpdate")
+    public String infoUpdate(HttpSession session, Users user, Model model) {
+        AuthInfo authInfo = (AuthInfo) session.getAttribute("authInfo");
+        Users users = usersRepository.findById(authInfo.getId());
+        users.setName(user.getName());
+        users.setAddress(user.getAddress());
+        users.setEmail(user.getEmail());
+        users.setPhone(user.getPhone());
+        usersRepository.save(users);
+        MessageDto message = new MessageDto("정보가 수정되었습니다", "/info/staff", RequestMethod.GET, null);
+        return showMessageAndRedirect(message, model);
+    }
+
 }

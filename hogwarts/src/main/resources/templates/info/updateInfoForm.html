@@ -28,7 +28,7 @@
 
   <!-- 메인 div -->
   <main>
-    <h1>내 정보 조회</h1>
+    <h1>정보 수정</h1>
     <div class="split--div"></div>
     <table border="1" class="input--table" >
       <colgroup>
@@ -41,9 +41,10 @@
         <th>ID</th>
         <td th:text="${user.id}">230001</td>
         <th>입사 날짜</th>
-        <td th:text="${#temporals.format(user.hireDate, 'yyyy-MM-dd')}">2023-01-01</td>
+        <td>2023-01-01</td>
       </tr>
     </table>
+    <form action="/InfoUpdate" method="POST">
     <table border="1" class="input--table" >
       <colgroup>
         <col class="col1">
@@ -53,7 +54,7 @@
       </colgroup>
       <tr>
         <th>성명</th>
-        <td th:text="${user.name}">박성희</td>
+        <td><input type="text" id="name" name="name" th:value="${user.name}"></td>
         <th>생년월일</th>
         <td th:text="${user.birthDate}">1995-09-03</td>
       </tr>
@@ -61,16 +62,17 @@
         <th>성별</th>
         <td th:text="${user.gender}">여성</td>
         <th>주소</th>
-        <td th:text="${user.address}">부산시 부산진구</td>
+        <td><input type="text" id="address" name="address" th:value="${user.address}"></td>
       </tr>
       <tr>
         <th>연락처</th>
-        <td th:text="${user.phone}">010-9930-2889</td>
+        <td><input type="text" id="phone" name="phone" th:value="${user.phone}"></td>
         <th>email</th>
-        <td th:text="${user.email}">sungheepppp@gmail.com</td>
+        <td><input type="text" id="email" name="email" th:value="${user.email}"></td>
       </tr>
     </table>
-    <button type="button" onclick="location.href='/InfoUpdateForm'" class="btn btn-dark update--button">수정하기</button>
+    <button type="submit" class="btn btn-dark update--button">수정하기</button>
+    </form>
   </main>
 </div>
 

@@ -49,15 +49,23 @@
                 <strong th:text="${comment.name + '(' + comment.authorId + ')'}">작성자</strong> |
                 <span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm:ss')}">작성일</span>
               </p>
-              <p th:text="${comment.content}">댓글 내용</p>
-
-              <div class="comment-actions" th:if="${session.authInfo.uid.equals(comment.userId)}">
+              <p th:text="${comment.content}" id="user-comment">댓글 내용</p>
+              <form action="/post/commentUpdate" method="post" style="display: inline">
+              <input type="text" id="updateComment" name="updateComment" th:value="${comment.content}" style="display: none" size="100px">
+                <input type="hidden" id="pid" name="pid" th:value="${post.pid}">
+                <input type="hidden" id="cid" name="cid" th:value="${comment.id}">
+                <br>
+                <div class="comment-actions" style="display: inline">
+              <button id="update-insert" style="display: none" type="submit">입력</button>
+                </div>
+              </form>
+              <div class="comment-actions" th:if="${session.authInfo.uid.equals(comment.userId)}" style="display: inline">
                 <!-- 수정 버튼 -->
-                <a href="#" th:href="@{/post/{pid}/commentEdit(pid=${post.pid}, cid=${comment.id})}">수정</a>
-
+                <button onclick='btnClick()' id="comment-update">수정</button>
                 <!-- 삭제 버튼 -->
                 <form th:action="@{/post/{pid}/commentDelete(pid=${post.pid}, cid=${comment.id})}" method="POST" style="display:inline;">
-                  <button type="submit" onclick="return confirm('댓글을 삭제하시겠습니까?');">삭제</button>
+                  <button type="submit" onclick="return confirm('댓글을 삭제하시겠습니까?');" id="comment-delete">삭제</button>
+                  <button type="button" id="update-cancel" onclick="btnClick()" style="display: none">취소</button>
                 </form>
               </div>
             </li>
@@ -93,5 +101,37 @@
     </div>
   </div>
 </div>
+<script>
+  function btnClick() {
+
+    const mydiv = document.getElementById('user-comment');
+    const delete_btn = document.getElementById('comment-delete')
+    const update_btn = document.getElementById('comment-update')
+    const update_text = document.getElementById("updateComment")
+    const cancel = document.getElementById('update-cancel')
+    const update_input = document.getElementById('update-insert')
+
+    if(mydiv.style.display === 'none') {
+
+      mydiv.style.display = '';
+      update_text.style.display = 'none';
+      delete_btn.style.display = '';
+      update_btn.style.display = '';
+      cancel.style.display = 'none';
+      update_input.style.display = 'none';
+
+    }else {
+
+      mydiv.style.display = 'none';
+      update_text.style.display = '';
+      delete_btn.style.display = 'none';
+      update_btn.style.display = 'none';
+      cancel.style.display = '';
+      update_input.style.display = '';
+
+    }
+
+  }
+</script>
 </body>
 </html>
