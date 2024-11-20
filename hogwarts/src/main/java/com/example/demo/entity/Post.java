@@ -29,6 +29,8 @@ public class Post {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime updateAt;
     private int cnt;
 
     // 게시글에 달린 댓글 리스트
@@ -47,6 +49,7 @@ public class Post {
                 ", createdAt=" + createdAt +
                 ", cnt=" + cnt +
                 ", userid=" + userid +
+                ", updateAt=" + updateAt +
                 '}';
     }
 }

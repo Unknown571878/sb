@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Users;
+import com.example.demo.reopository.GradeRepository;
 import com.example.demo.reopository.UsersRepository;
 import com.example.demo.service.*;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class BeginCotroller {
 
     private final UsersRepository usersRepository;
     private final AuthService authService;
+    private final GradeRepository gradeRepository;
 
     private String showMessageAndRedirect(final MessageDto params, Model model) {
         model.addAttribute("params", params);
@@ -56,10 +58,6 @@ public class BeginCotroller {
         return "/info/password";
     }
 
-    @GetMapping("/info/grade")
-    public String grade() {
-        return "/info/grade";
-    }
 
     @GetMapping("/loginForm")
     public String loginForm() {

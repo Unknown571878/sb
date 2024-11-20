@@ -20,10 +20,11 @@ public class Grade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long gid;
-    private String id;
+    private String sid;
+    private String pid;
     private String years;
     private String term;
-    private int code;
+    private String code;
     private String subject;
     private int credit;
     private String grade;
