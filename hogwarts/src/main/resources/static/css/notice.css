@@ -147,3 +147,14 @@ td, th {
 	display: flex;
 	justify-content: center;
 }
+
+.selected--menu,
+.sub--menu--table td a:hover {
+	color: #075AA4;
+	font-weight: 600;
+}
+
+.sub--menu--table {
+	border-color: #D1D5D4;
+
+}

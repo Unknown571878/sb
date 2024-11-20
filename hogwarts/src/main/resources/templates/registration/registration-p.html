@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>성적 입력</title>
+  <link rel="stylesheet" href="/css/registration-p.css">
+</head>
+<div th:replace="/fragments/header.html :: fragment-header"></div>
+<body>
+<div th:replace="/fragments/nav.html :: fragment-nav"></div>
+<div class="d-flex justify-content-center align-items-start" style="min-width: 100em;">
+  <!-- 세부 메뉴 div-->
+  <div class="sub--menu">
+    <div class="sub--menu--top">
+      <h2>강의</h2>
+    </div>
+    <!-- 메뉴 -->
+    <!-- 선택된 메뉴에 class="selected--menu" 추가해주세요 -->
+    <div class="sub--menu--mid">
+      <table class="sub--menu--table" border="1">
+        <tr>
+          <td><a href="/registration/registration-p" class="selected--menu">담당 강의</a></td>
+        </tr>
+        <tr>
+          <td><a href="/registration/application-p">강의 개설 신청</a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+<div class="main--container">
+  <div class="main-title">
+    <h1>담당 강의</h1>
+    <div class="split--div-post"></div>
+    <div id="subjectsContainer" th:if="${departments != null}">
+      <table class="table-custom">
+        <thead>
+        <tr>
+          <th>번호</th>
+          <th>과목</th>
+          <th>과목 코드</th>
+          <th>수업시간</th>
+          <th>수업일</th>
+          <th>담당 교수</th>
+          <th>수강인원</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 데이터 반복 출력 -->
+        <tr th:each="department : ${departments}">
+          <td th:text="${department.id}"></td>
+          <td><a href="/registration/attendance?id=" th:attrappend="href=${department.id}" th:text="${department.name}"></a></td>
+          <td th:text="${department.code}"></td>
+          <td th:text="${department.time}"></td>
+          <td th:text="${department.week}"></td>
+          <td th:text="${department.professor_name}"></td>
+          <td th:text="${department.apply + '/' + department.headCount}"></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,7 +1,13 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Department;
 import com.example.demo.entity.Grade;
+import com.example.demo.entity.Registration;
+import com.example.demo.entity.Users;
+import com.example.demo.reopository.DepartmentRepository;
 import com.example.demo.reopository.GradeRepository;
+import com.example.demo.reopository.RegistrationRepository;
+import com.example.demo.reopository.UsersRepository;
 import com.example.demo.service.AuthInfo;
 import com.example.demo.service.GradeService;
 import com.example.demo.service.MessageDto;
@@ -13,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,6 +30,9 @@ public class GradeController {
 
     private final GradeRepository gradeRepository;
     private final GradeService gradeService;
+    private final RegistrationRepository registrationRepository;
+    private final DepartmentRepository departmentRepository;
+    private final UsersRepository usersRepository;
 
     private String showMessageAndRedirect(final MessageDto params, Model model) {
         model.addAttribute("params", params);
@@ -53,6 +64,27 @@ public class GradeController {
             return showMessageAndRedirect(message, model);
         }
         return "/info/grade";
+    }
+
+    @GetMapping("/info/gradeList")
+    public String gradeList(Model model, HttpSession session){
+        AuthInfo authInfo = (AuthInfo) session.getAttribute("authInfo");
+        List<Department> departments = departmentRepository.findByProfessor(authInfo.getId());
+        model.addAttribute("departments", departments);
+        return "/info/gradeList";
+    }
+
+    @GetMapping("/info/gradeInput")
+    public String gradeInput(@RequestParam("code") String code, Model model) {
+        List<Registration> registrations = registrationRepository.findByCode(code);
+        List<Users> users = new ArrayList<>();
+        for (Registration registration : registrations) {
+            users.add(usersRepository.findById(registration.getSid()));
+        }
+        Department department = departmentRepository.findByCode(code);
+        model.addAttribute("users", users);
+        model.addAttribute("department", department);
+        return "/info/gradeInput";
     }
 
 }

@@ -98,11 +98,6 @@ public class BeginCotroller {
         return "redirect:/";
     }
 
-    @GetMapping("/info/gradeInput")
-    public String gradeInput(Model model) {
-        return "/info/gradeInput";
-    }
-
     @PostMapping("/info/newPassword")
     public String newPassword(@RequestParam String password, @RequestParam Long uid, Model model) {
         Users user = usersRepository.findById(uid).orElse(null);

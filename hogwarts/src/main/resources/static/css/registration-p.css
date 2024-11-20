@@ -1,4 +1,30 @@
+.sub--menu {
+    min-width: 230px;
+    margin-right: 80px;
+    text-align: center;
+}
 
+.sub--menu--top {
+    text-align: center;
+    padding: 25px 0;
+    border-bottom: 3px solid #33688F;
+}
+
+.sub--menu--mid {
+    display: flex;
+    justify-content: center;
+}
+
+.sub--menu--table {
+    border-color: #D1D5D4;
+
+}
+
+.selected--menu,
+.sub--menu--table td a:hover {
+    color: #075AA4;
+    font-weight: 600;
+}
 
 .form-container {
     width: 80%;
