@@ -8,129 +8,139 @@ body {
 	padding: 0;
 }
 
-td, th {
-	text-align: center;
-	padding: 10px;
-	color: #555;
-}
-
-.notice {
+h1 {
 	text-align: left;
-	margin-bottom: 20px;
-}
+	font-size: 2em;
+	color: #333;
 
-.write--div {
-	background-color: #f7f6f6;
-	padding: 20px;
 }
-.title--container {
-	display: flex;
-	margin-bottom: 20px;
-}
-
-.content--container {
-	width: 1500px;
-}
-
 .split--div-post {
 	min-width: 1100px;
 	height: 2px;
 	background-color: gray;
 	margin: 20px 0 50px;
 }
-
 .main-title {
 	width: 80%;
 	margin: 20px auto;
 }
 
-.custom-file {
-	width: 500px;
+.post-table {
+	width: 80%;
+	margin: 20px auto;
+	border-collapse: collapse;
+	background-color: #fff;
 }
 
-.update--box {
-	width: 500px;
-	border: hidden;
-}
-.textarea {
-	border: hidden;
-}
-.table {
-	width: 80%;
-	margin-bottom: 20px;
-}
-
-.table-size {
-	width: 80%;
+thead th {
 	text-align: center;
-	margin-bottom: 20px;
-	margin-left: auto;
-	margin-right: auto;
+	background-color: #f7f7f7;
+	padding: 10px;
+	font-weight: bold;
+	color: #333;
+	border-bottom: 2px solid #ddd;
 }
 
-.first--tr {
-	background-color: #f7f6f6;
-	font-weight: bolder;
-	overflow: hidden;
-	text-overflow: ellipsis;
+.post-tbody-tr {
+	border-bottom: 1px solid #ddd;
 }
 
-.second--tr {
-	border-bottom: 1px solid #031734;
+tbody tr:hover {
+	background-color: #f1f1f1;
 }
 
-.type {
-	width: 70px;
-}
-.read--container {
-	display: flex;
-	flex-direction: column;
+td, th {
+	text-align: center;
+	padding: 10px;
+	color: #555;
 }
 
-.table-active {
-	width: 80px;
-	font-size: 15px;
+td.title a {
+	color: #2c3e50;
+	text-decoration: none;
 	font-weight: bold;
 }
 
-.second--tr:hover {
-	font-weight: bold;
-	cursor: pointer;
+td.title a:hover {
+	text-decoration: underline;
 }
 
 .button {
-	border: 1px solid #031734;
-	border-radius: 3px;
-	background-color: #031734;
+	display: inline-block;
+	padding: 8px 16px;
+	margin: 20px auto;
+	background-color: #2c3e50;
 	color: #fff;
 	text-decoration: none;
-	padding: 3px;
-	height: 31px;
-	margin-left: 10px;
+	border-radius: 4px;
+	text-align: center;
 }
 
 .button:hover {
-	color: #fff;
+	background-color: #34495e;
+}
 
-}
-.select--button {
-	margin-left: 200px;
-}
-.input--box {
-	border: 1px solid #D2D1D1;
-	border-radius: 3px;
-	height: 31px;
-	margin-right: 20px;
-}
-.form--container {
-	display: flex;
-	justify-content: flex-end;
-	margin: 0 90px 20px 0;
-}
-.paging--container {
+/* 페이징 스타일 */
+.pagination {
 	display: flex;
 	justify-content: center;
+	list-style-type: none;
+	padding: 0;
 }
+
+.page-item {
+	margin: 0 5px;
+}
+
+.page-item a {
+	display: inline-block;
+	padding: 8px 12px;
+	background-color: #f7f7f7;
+	color: #333;
+	border-radius: 4px;
+	text-decoration: none;
+}
+
+.page-item a:hover {
+	background-color: #ddd;
+}
+
+.page-item.disabled a {
+	pointer-events: none;
+	color: #aaa;
+	background-color: #e9e9e9;
+}
+
+.page-item.active a {
+	font-weight: bold;
+	color: #fff;
+	background-color: #2c3e50;
+}
+
+.post-form {
+	width: 1500px;
+}
+
+.write-button {
+	display: inline-block;
+	padding: 10px 20px;
+	background-color: #007bff; /* 버튼 배경색 */
+	color: #fff;
+	text-decoration: none;
+	font-weight: bold;
+	border-radius: 5px;
+	text-align: center;
+	transition: background-color 0.3s ease;
+}
+
+.write-button-div {
+	width: 80%;
+	margin: 20px auto;
+}
+
+/*.write-button:hover {*/
+/*    background-color: darkblue; !* 호버 시 배경색 *!*/
+/*}*/
 
 .sub--menu {
 	min-width: 230px;
@@ -146,15 +156,4 @@ td, th {
 .sub--menu--mid {
 	display: flex;
 	justify-content: center;
-}
-
-.selected--menu,
-.sub--menu--table td a:hover {
-	color: #075AA4;
-	font-weight: 600;
-}
-
-.sub--menu--table {
-	border-color: #D1D5D4;
-
 }

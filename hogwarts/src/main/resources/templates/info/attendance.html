@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>출석 체크</title>
+  <link rel="stylesheet" href="/css/attendance.css">
+</head>
+<body>
+<div th:replace="/fragments/header.html :: fragment-header"></div>
+<div th:replace="/fragments/nav.html :: fragment-nav"></div>
+<div class="main-container">
+  <h1 th:text="'출석 체크 - ' + ${course.subject}"></h1>
+  <h2 th:text="'교수: ' + ${course.professorName}"></h2>
+  <h3 th:text="'수업 시간: ' + ${course.time}"></h3>
+
+  <form action="/attendance/submit" method="post">
+    <table class="table-custom">
+      <thead>
+      <tr>
+        <th>번호</th>
+        <th>학번</th>
+        <th>학생 이름</th>
+        <th>출석</th>
+        <th>결석</th>
+        <th>지각</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="student, iterStat : ${students}">
+        <td th:text="${iterStat.index + 1}"></td>
+        <td th:text="${student.id}"></td>
+        <td th:text="${student.name}"></td>
+        <td>
+          <input type="radio" th:name="'attendance[' + ${student.id} + ']'" value="출석" required>
+        </td>
+        <td>
+          <input type="radio" th:name="'attendance[' + ${student.id} + ']'" value="결석">
+        </td>
+        <td>
+          <input type="radio" th:name="'attendance[' + ${student.id} + ']'" value="지각">
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">출석 저장</button>
+      <a href="/professor/courses" class="btn btn-secondary">돌아가기</a>
+    </div>
+  </form>
+</div>
+</body>
+</html>

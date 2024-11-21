@@ -15,10 +15,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -51,13 +53,13 @@ public class GradeController {
             model.addAttribute("terms", terms);
 
             if (year != null && term != null) {
-                List<Grade> grades = gradeService.getGradesByYearAndTerm(year, term);
-                List<Map<String, Object>> stats = gradeService.calculateStatistics();
+                List<Grade> grades = gradeService.getGradesByYearAndTerm(year, term, authInfo.getId());
+                List<Map<String, Object>> stats = gradeService.calculateStatistics(authInfo.getId());
 
                 model.addAttribute("grades", grades);
                 model.addAttribute("yearTermStats", stats);
             }
-            Map<String, Double> overallStats = gradeService.calculateOverallStatistics();
+            Map<String, Double> overallStats = gradeService.calculateOverallStatistics(authInfo.getId());
             model.addAttribute("overallStats", overallStats);
         } else {
             MessageDto message = new MessageDto("로그인이 필요한 서비스입니다", "/loginForm", RequestMethod.GET, null);
@@ -82,9 +84,46 @@ public class GradeController {
             users.add(usersRepository.findById(registration.getSid()));
         }
         Department department = departmentRepository.findByCode(code);
+        if(department.isEvaluation())
+        {
+            MessageDto message = new MessageDto("이미 성적 입력이 완료되었습니다", "/info/gradeList", RequestMethod.GET, null);
+            return showMessageAndRedirect(message, model);
+        }
         model.addAttribute("users", users);
         model.addAttribute("department", department);
         return "/info/gradeInput";
+    }
+
+    @PostMapping("/info/submitGrades")
+    public String submitGrades(@RequestParam Map<String, String> scores, @RequestParam String code, Model model) {
+        scores.forEach((key, value) -> {
+            if (key.startsWith("scores[")) {
+                String studentId = key.substring(7, key.length() - 1);
+                Users users = usersRepository.findById(studentId);
+                Department department = departmentRepository.findByCode(code);
+                LocalDate currentDate = LocalDate.now();
+                int year = currentDate.getYear();
+                int month = currentDate.getMonthValue();
+                Grade grade = Grade.builder()
+                        .sid(studentId)
+                        .pid(department.getProfessor())
+                        .years(String.valueOf(year))
+                        .term(gradeService.termReturn(month))
+                        .code(code)
+                        .subject(department.getName())
+                        .apply_credit(department.getApply_credit())
+                        .credit(gradeService.creditReturn(value))
+                        .grade(gradeService.gradeReturn(value))
+                        .score(Float.parseFloat(value))
+                        .build();
+                gradeRepository.save(grade);
+            }
+        });
+        Department department = departmentRepository.findByCode(code);
+        department.setEvaluation(true);
+        departmentRepository.save(department);
+
+        return "redirect:/info/gradeList";
     }
 
 }

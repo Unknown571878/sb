@@ -40,13 +40,22 @@ public class PostController {
     }
 
     @GetMapping("/notice")
-    public String notice() {
+    public String notice(Model model, @PageableDefault(page=0,size=20) Pageable pageable) {
+        List<Post> posts = postRepository.findByTypeOrderByPidDesc("notice");
+        // 페이지 정보에 따라 현재 페이지의 시작 인덱스를 계산
+        final int start = (int) pageable.getOffset();
+        // 현재 페이지의 끝 인덱스를 계산하되, 목록 크기를 초과하지 않도록 함
+        final int end = Math.min((start + pageable.getPageSize()), posts.size());
+        // 현재 페이지의 아이템 서브리스트를 포함하는 Page 객체 생성
+        final Page<Post> page = new PageImpl<>(posts.subList(start, end), pageable, posts.size());
+        // 페이지 객체를 모델에 추가하여 뷰에서 접근 가능하도록 함
+        model.addAttribute("posts", page);
         return "/post/notice";
     }
 
     @GetMapping("/postList")
     public String postList(Model model, @PageableDefault(page=0,size=20) Pageable pageable) {
-        List<Post> posts = postRepository.findAllByOrderByPidDesc();
+        List<Post> posts = postRepository.findByTypeOrderByPidDesc("free");
         // 페이지 정보에 따라 현재 페이지의 시작 인덱스를 계산
         final int start = (int) pageable.getOffset();
         // 현재 페이지의 끝 인덱스를 계산하되, 목록 크기를 초과하지 않도록 함

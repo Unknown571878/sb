@@ -19,9 +19,7 @@ class Sb1120ApplicationTests {
 
     @Autowired
     TeamRepository teamRepository;
-    @Test
-    void contextLoads() {
-    }
+
     @Test
     public void test1() {
         Team team = Team.builder().id(1).teamName("서울").build();
@@ -59,4 +57,5 @@ class Sb1120ApplicationTests {
             System.out.println(member1);
         }
     }
+
 }

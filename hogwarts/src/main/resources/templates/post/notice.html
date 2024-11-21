@@ -1,96 +1,114 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>공지사항</title>
+  <title>게시물 목록</title>
   <link rel="stylesheet" href="/css/notice.css">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
 </head>
 <body>
 <div th:replace="/fragments/header.html :: fragment-header"></div>
 <div th:replace="/fragments/nav.html :: fragment-nav"></div>
 
 <div class="d-flex justify-content-center align-items-start" style="min-width: 100em;">
-<div class="sub--menu">
-  <div class="sub--menu--top">
-    <h2>게시판</h2>
-  </div>
-  <!-- 메뉴 -->
-  <!-- 선택된 메뉴에 class="selected--menu" 추가해주세요 -->
-  <div class="sub--menu--mid">
-    <table class="sub--menu--table" border="1">
-      <tr>
-        <td><a href="/post/notice" class="selected--menu">공지사항</a></td>
-      </tr>
-      <tr>
-        <td><a href="/post/postList">자유게시판</a></td>
-      </tr>
-    </table>
-  </div>
-</div>
 
-<!-- 공지사항 목록 페이지 -->
-<div class="content--container">
-  <div class="main-title">
-    <h1>공지사항</h1>
-    <div class="split--div-post"></div>
+  <div class="sub--menu">
+    <div class="sub--menu--top">
+      <h2>공지사항</h2>
+    </div>
+    <!-- 메뉴 -->
+    <!-- 선택된 메뉴에 class="selected--menu" 추가해주세요 -->
+    <div class="sub--menu--mid">
+      <table class="sub--menu--table" border="1">
+        <tr>
+          <td><a href="/post/notice" class="selected--menu">공지사항</a></td>
+        </tr>
+        <tr>
+          <td><a href="/post/postList">자유게시판</a></td>
+        </tr>
+      </table>
+    </div>
   </div>
 
-  <div class="table">
-    <table class="table-size">
+  <div class="post-form">
+
+    <div class="main-title">
+      <h1>공지사항</h1>
+      <div class="split--div-post"></div>
+    </div>
+    <table class="post-table">
       <thead>
-      <tr class="first--tr">
-        <th class="type">번호</th>
+      <tr class="post-tbody-tr">
+        <th>번호</th>
         <th>제목</th>
+        <th>작성자</th>
         <th>작성일</th>
-        <th class="table-active">상태</th>
+        <th>조회수</th>
       </tr>
       </thead>
-      <tbody>
-      <tr class="second--tr" onclick="window.location.href='/notice/read?id=1'">
-        <td>1</td>
-        <td><a href="/notice/read?id=1">[공지] 2024년 봄학기 수업 일정 안내</a></td>
-        <td>2024-03-01</td>
-        <td>발표</td>
-      </tr>
-      <tr class="second--tr" onclick="window.location.href='/notice/read?id=2'">
-        <td>2</td>
-        <td><a href="/notice/read?id=2">[긴급] 서버 점검 안내</a></td>
-        <td>2024-02-28</td>
-        <td>발표</td>
-      </tr>
-      <tr class="second--tr" onclick="window.location.href='/notice/read?id=3'">
-        <td>3</td>
-        <td><a href="/notice/read?id=3">[장학] 2024년 1학기 장학금 신청 안내</a></td>
-        <td>2024-02-25</td>
-        <td>발표</td>
-      </tr>
-      <tr class="second--tr" onclick="window.location.href='/notice/read?id=4'">
-        <td>4</td>
-        <td><a href="/notice/read?id=4">[일반] 2024학년도 입학식 일정 안내</a></td>
-        <td>2024-02-20</td>
-        <td>발표</td>
-      </tr>
-      <tr class="second--tr" onclick="window.location.href='/notice/read?id=5'">
-        <td>5</td>
-        <td><a href="/notice/read?id=5">[일반] 2023년 졸업식 안내</a></td>
-        <td>2024-01-15</td>
-        <td>발표</td>
+      <tbody class="post-tbody-tr">
+      <tr class="post-tbody-tr" th:if="${#lists.size(posts)} > 0" th:each="post : ${posts}">
+        <td th:text="${post.pid}"></td>
+        <td class="title"><a href="/post/postDetail?pid=" th:attrappend="href=${post.pid}" th:text="${post.title}"></a></td>
+        <td th:text="${post.name}"></td>
+        <td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+        <td th:text="${post.cnt}"></td>
       </tr>
       </tbody>
     </table>
-  </div>
+    <div class="write-button-div" th:if="${session.authInfo.job.equals('관리자')}">
+      <a href="/post/postInsertForm" class="write-button">글쓰기</a>
+    </div>
 
-  <!-- 페이지네이션 -->
-  <div class="paging--container">
-    <a href="#" class="button">이전</a>
-    <a href="#" class="button">1</a>
-    <a href="#" class="button">2</a>
-    <a href="#" class="button">3</a>
-    <a href="#" class="button">다음</a>
+
+    <!-- 페이징 -->
+    <div th:if="${!posts.isEmpty()}">
+      <!-- 전역 변수 선언 -->
+      <nav
+              th:with="pageNumber = ${posts.pageable.pageNumber}, pageSize = ${posts.pageable.pageSize},totalPages = ${posts.totalPages},startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},tempEndPage = ${startPage + pageSize - 1},endPage = (${tempEndPage < totalPages ? tempEndPage : totalPages})"
+              aria-label="Page navigation"
+      >
+        <ul class="pagination">
+          <!-- 처음으로 이동 -->
+          <li th:classappend="${pageNumber < pageSize} ? 'disabled'" class="page-item">
+            <a class="page-link" th:href="@{/post/postList(page=0)}">
+              <span>&laquo;</span>
+              <span class="sr-only">First</span>
+            </a>
+          </li>
+
+          <!-- 이전으로 이동 -->
+          <li th:classappend="${posts.first} ? 'disabled'" class="page-item">
+            <a class="page-link" th:href="${posts.first} ? '#' : @{/post/postList(page=${pageNumber - 1})}" aria-label="Previous">
+              <span aria-hidden="true">&lt;</span>
+              <span class="sr-only">Previous</span>
+            </a>
+          </li>
+
+          <!-- 특정 페이지로 이동 -->
+          <li th:each="page: ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == pageNumber + 1} ? 'active'" class="page-item">
+            <a th:text="${page}" class="page-link" th:href="@{/post/postList(page=${page - 1})}"></a>
+          </li>
+
+          <!-- 다음으로 이동 -->
+          <li th:classappend="${posts.last} ? 'disabled'" class="page-item">
+            <a class="page-link" th:href="${posts.last} ? '#' : @{/post/postList(page=${pageNumber + 1})}" aria-label="Next">
+              <span aria-hidden="true">&gt;</span>
+              <span class="sr-only">Next</span>
+            </a>
+          </li>
+
+          <!-- 마지막으로 이동 -->
+          <li th:classappend=" ${T(java.lang.Math).floor(totalPages / pageSize) * pageSize - 1 <= startPage} ? 'disabled'" class="page-item">
+            <a class="page-link" th:href="@{/post/postList(page=${totalPages - 1})}">
+              <span>&raquo;</span>
+              <span class="sr-only">Last</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div> <!-- /container -->
   </div>
 </div>
-</div>
+
 </body>
 </html>

@@ -29,6 +29,7 @@ public class Department {
     private LocalDate createAt;
     private String time;
     private String week;
+    private int apply_credit; //이수학점
     private int apply;
     private int headCount;
     private boolean evaluation; // 평가

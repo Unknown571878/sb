@@ -19,8 +19,8 @@ public class GradeService {
         this.gradeRepository = gradeRepository;
     }
 
-    public List<Grade> getGradesByYearAndTerm(String year, String term) {
-        return gradeRepository.findByYearsAndTerm(year, term);
+    public List<Grade> getGradesByYearAndTerm(String year, String term, String sid) {
+        return gradeRepository.findByYearsAndTermAndSid(year, term, sid);
     }
 
     public List<String> getAllYears(String sid) {
@@ -39,8 +39,8 @@ public class GradeService {
                 .collect(Collectors.toList());
     }
 
-    public List<Map<String, Object>> calculateStatistics() {
-        List<Grade> grades = gradeRepository.findAll();
+    public List<Map<String, Object>> calculateStatistics(String sid) {
+        List<Grade> grades = gradeRepository.findBySid(sid);
 
         // 년도-학기별로 그룹화
         Map<String, List<Grade>> groupedByYearTerm = grades.stream()
@@ -54,7 +54,8 @@ public class GradeService {
             String term = yearTerm[1];
             List<Grade> semesterGrades = entry.getValue();
 
-            double totalCredits = semesterGrades.stream().mapToInt(Grade::getCredit).sum();
+            double totalCredits = semesterGrades.stream().mapToDouble(Grade::getCredit).sum();
+            double total_apply_Credits = semesterGrades.stream().mapToDouble(Grade::getApply_credit).sum();
             double totalScore = semesterGrades.stream().mapToDouble(Grade::getScore).sum();
             double avgCredit = roundToThreeDecimalPlaces(totalCredits / semesterGrades.size());
             double avgScore = roundToThreeDecimalPlaces(totalScore / semesterGrades.size());
@@ -64,7 +65,7 @@ public class GradeService {
             stat.put("term", term);
             stat.put("avgCredit", avgCredit);
             stat.put("avgScore", avgScore);
-            stat.put("totalCredits", totalCredits);
+            stat.put("totalCredits", total_apply_Credits);
 
             stats.add(stat);
         }
@@ -83,10 +84,11 @@ public class GradeService {
     }
 
 
-    public Map<String, Double> calculateOverallStatistics() {
-        List<Grade> grades = gradeRepository.findAll();
+    public Map<String, Double> calculateOverallStatistics(String sid) {
+        List<Grade> grades = gradeRepository.findBySid(sid);
 
-        double totalCredits = grades.stream().mapToInt(Grade::getCredit).sum();
+        double totalCredits = grades.stream().mapToDouble(Grade::getCredit).sum();
+        double total_apply_Credits = grades.stream().mapToDouble(Grade::getApply_credit).sum();
         double totalScore = grades.stream().mapToDouble(Grade::getScore).sum();
         double avgCredit = roundToThreeDecimalPlaces(totalCredits / grades.size());
         double avgScore = roundToThreeDecimalPlaces(totalScore / grades.size());
@@ -94,7 +96,7 @@ public class GradeService {
         Map<String, Double> overallStats = new HashMap<>();
         overallStats.put("avgCredit", avgCredit);
         overallStats.put("avgScore", avgScore);
-        overallStats.put("totalCredits", totalCredits); // 전체 학점 누적
+        overallStats.put("totalCredits", total_apply_Credits);
 
         return overallStats;
     }
@@ -102,4 +104,62 @@ public class GradeService {
     private double roundToThreeDecimalPlaces(double value) {
         return Math.round(value * 1000.0) / 1000.0;
     }
+
+    public String gradeReturn(String score){
+        String grade = "";
+        float myScore = Float.parseFloat(score);
+        if(myScore >= 95){
+            grade = "A+";
+        } else if(myScore >= 90 && myScore <= 94){
+            grade = "A";
+        } else if(myScore > 84 && myScore < 90){
+            grade = "B+";
+        } else if(myScore > 79 && myScore < 85){
+            grade = "B";
+        } else if(myScore > 74 && myScore < 80){
+            grade = "C+";
+        } else if(myScore > 69 && myScore < 75){
+            grade = "C";
+        } else if(myScore > 64 && myScore < 70){
+            grade = "D+";
+        } else if(myScore > 59 && myScore < 65){
+            grade = "D";
+        } else {
+            grade = "F";
+        }
+        return grade;
+    }
+
+    public float creditReturn(String score){
+        float credit = 0;
+        float myScore = Float.parseFloat(score);
+        if(myScore >= 95){
+            credit = 4.5f;
+        } else if(myScore >= 90 && myScore <= 94){
+            credit = 4.0f;
+        } else if(myScore > 84 && myScore < 90){
+            credit = 3.5f;
+        } else if(myScore > 79 && myScore < 85){
+            credit = 3.0f;
+        } else if(myScore > 74 && myScore < 80){
+            credit = 2.5f;
+        } else if(myScore > 69 && myScore < 75){
+            credit = 2.0f;
+        } else if(myScore > 64 && myScore < 70){
+            credit = 1.5f;
+        } else if(myScore > 59 && myScore < 65){
+            credit = 1.0f;
+        } else {
+            credit = 0.0f;
+        }
+        return credit;
+    }
+
+    public String termReturn(int month){
+        if (month <= 6)
+            return "1학기";
+        else
+            return "2학기";
+    }
+
 }

@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface GradeRepository extends JpaRepository<Grade, Long> {
     public List<Grade> findBySid(String id);
-    public List<Grade> findByYearsAndTerm(String year, String term);
+    public List<Grade> findByYearsAndTermAndSid(String year, String term, String sid);
 }

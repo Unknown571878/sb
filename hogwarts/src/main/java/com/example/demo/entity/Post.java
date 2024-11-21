@@ -26,6 +26,7 @@ public class Post {
     private String title;
     private String content;
     private String name;
+    private String type;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
@@ -50,6 +51,7 @@ public class Post {
                 ", cnt=" + cnt +
                 ", userid=" + userid +
                 ", updateAt=" + updateAt +
+                ", type='" + type + '\'' +
                 '}';
     }
 }

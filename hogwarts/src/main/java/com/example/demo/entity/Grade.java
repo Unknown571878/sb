@@ -26,7 +26,8 @@ public class Grade {
     private String term;
     private String code;
     private String subject;
-    private int credit;
+    private float credit; //취득학점
+    private int apply_credit; //이수학점
     private String grade;
     private float score;
 }

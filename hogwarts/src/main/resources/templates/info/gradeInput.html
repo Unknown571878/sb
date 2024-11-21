@@ -14,6 +14,7 @@
     <h1 th:text="'성적 입력 - ' + ${department.name}"></h1>
     <div class="split--div-post"></div>
     <form action="/info/submitGrades" method="post">
+      <input type="hidden" id="code" name="code" th:value="${department.code}">
       <table class="table-custom">
         <thead>
         <tr>
@@ -22,7 +23,6 @@
           <th>학생 이름</th>
           <th>성별</th>
           <th>평가 점수</th>
-          <th>성적</th>
         </tr>
         </thead>
         <tbody>
@@ -33,20 +33,7 @@
           <td th:text="${user.name}"></td>
           <td th:text="${user.gender}"></td>
           <td>
-            <input type="number" name="scores[${user.id}]" min="0" max="100" step="1" required>
-          </td>
-          <td>
-            <select name="grades[${user.id}]" required>
-              <option value="A+">A+</option>
-              <option value="A">A</option>
-              <option value="B+">B+</option>
-              <option value="B">B</option>
-              <option value="C+">C+</option>
-              <option value="C">C</option>
-              <option value="D+">D+</option>
-              <option value="D">D</option>
-              <option value="F">F</option>
-            </select>
+            <input type="number" th:name="'scores['+${user.id}+']'" min="0" max="100" step="1" required>
           </td>
         </tr>
         </tbody>

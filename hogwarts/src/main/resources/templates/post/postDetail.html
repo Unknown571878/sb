@@ -33,7 +33,7 @@
       <div class="post-detail">
         <h2 th:text="${post.title}">제목</h2>
         <p class="post-meta">
-          <span th:text="'작성자: ' + ${post.name}">작성자</span> |
+          <span th:text="'작성자: ' + ${post.name}">작성자</span>|
           <span th:text="'작성일: ' + ${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss')}">작성일</span>
         </p>
         <div class="post-content">

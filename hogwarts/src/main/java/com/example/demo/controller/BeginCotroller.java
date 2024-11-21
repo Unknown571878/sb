@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Post;
 import com.example.demo.entity.Users;
 import com.example.demo.reopository.GradeRepository;
+import com.example.demo.reopository.PostRepository;
 import com.example.demo.reopository.UsersRepository;
 import com.example.demo.service.*;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,6 +27,7 @@ public class BeginCotroller {
     private final UsersRepository usersRepository;
     private final AuthService authService;
     private final GradeRepository gradeRepository;
+    private final PostRepository postRepository;
 
     private String showMessageAndRedirect(final MessageDto params, Model model) {
         model.addAttribute("params", params);
@@ -32,6 +36,8 @@ public class BeginCotroller {
 
     @GetMapping("/")
     public String index(HttpSession session, Model model) {
+        List<Post> posts = postRepository.findByTypeOrderByPidDesc("notice");
+        model.addAttribute("posts", posts);
         if(session.getAttribute("authInfo") != null) {
             AuthInfo authInfo = (AuthInfo) session.getAttribute("authInfo");
             Users users = usersRepository.findById(authInfo.getId());

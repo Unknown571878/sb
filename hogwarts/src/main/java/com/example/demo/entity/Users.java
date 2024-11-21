@@ -46,8 +46,6 @@ public class Users {
 
     private String department;
 
-    private Long gId;
-
     public boolean matchPassword(String password) {
         return this.password.equals(password);
     }

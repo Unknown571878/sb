@@ -40,8 +40,9 @@
         <th>학기</th>
         <th>과목 코드</th>
         <th>과목명</th>
-        <th>학점</th>
+        <th>이수 학점</th>
         <th>성적</th>
+        <th>취득 학점</th>
         <th>점수</th>
       </tr>
       </thead>
@@ -52,8 +53,9 @@
         <td th:text="${grade.term}"></td>
         <td th:text="${grade.code}"></td>
         <td th:text="${grade.subject}"></td>
-        <td th:text="${grade.credit}"></td>
+        <td th:text="${grade.apply_credit}"></td>
         <td th:text="${grade.grade}"></td>
+        <td th:text="${grade.credit}"></td>
         <td th:text="${grade.score}"></td>
       </tr>
       </tbody>
@@ -67,9 +69,9 @@
       <tr>
         <th>년도</th>
         <th>학기</th>
-        <th>평균 학점</th>
+        <th>평균 취득 학점</th>
         <th>평균 점수</th>
-        <th>취득 학점</th>
+        <th>총 이수 학점</th>
       </tr>
       </thead>
       <tbody>
