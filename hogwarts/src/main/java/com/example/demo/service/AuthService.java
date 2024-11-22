@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Users;
-import com.example.demo.reopository.UsersRepository;
+import com.example.demo.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

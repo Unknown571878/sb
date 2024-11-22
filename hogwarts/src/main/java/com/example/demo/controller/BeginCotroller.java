@@ -2,9 +2,9 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Post;
 import com.example.demo.entity.Users;
-import com.example.demo.reopository.GradeRepository;
-import com.example.demo.reopository.PostRepository;
-import com.example.demo.reopository.UsersRepository;
+import com.example.demo.repository.GradeRepository;
+import com.example.demo.repository.PostRepository;
+import com.example.demo.repository.UsersRepository;
 import com.example.demo.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

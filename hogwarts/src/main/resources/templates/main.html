@@ -21,7 +21,7 @@
             <div class="main--page--split"></div>
             <table>
               <tr th:each="post, iterStat : ${posts}" th:if="${iterStat.index < 5}">
-                <td><a href="/post/postDetail?pid=" th:attrappend="href=${post.pid}" th:text="${post.title}"></a></td>
+                <td><a href="/post/noticeDetail?pid=" th:attrappend="href=${post.pid}" th:text="${post.title}"></a></td>
                 <td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd')}"></td>
               </tr>
 

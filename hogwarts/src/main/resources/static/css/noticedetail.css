@@ -1,0 +1,313 @@
+/* 기본 설정 */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+.container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 제목 스타일 */
+.main-title h1 {
+    font-size: 2.2rem;
+    color: #333;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+
+
+
+/* 게시글 제목 */
+.post-detail h2 {
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+    color: #2c3e50;
+    font-weight: bold;
+    line-height: 1.3;
+}
+
+/* 게시글 메타정보 */
+.post-meta {
+    font-size: 1rem;
+    color: #7f8c8d;
+    margin-bottom: 20px;
+}
+
+.post-meta span {
+    margin-right: 20px;
+    font-weight: 600;
+}
+
+.post-meta .author {
+    color: #2980b9;
+}
+
+.post-meta .date {
+    color: #16a085;
+}
+
+/* 게시글 내용 */
+.post-content {
+    font-size: 1.5rem;  /* 글자 크기도 키웠습니다. 필요 없으면 제거 가능 */
+    line-height: 1.8;
+    color: #2c3e50;
+    margin-bottom: 40px;
+    min-height: 600px;  /* 최소 높이 설정 */
+    padding: 20px;
+    background-color: #f9f9f9;  /* 배경색 추가 */
+    border-radius: 8px;
+}
+
+
+
+.post-content p {
+    margin-bottom: 25px;
+}
+
+/* 댓글 영역 */
+.comments-section {
+    margin-top: 50px;
+    background-color: #ecf0f1;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.comments-section h3 {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    color: #34495e;
+    font-weight: 600;
+}
+
+/* 댓글 목록 */
+.comments-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.comments-section li {
+    margin-bottom: 25px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.comments-section li p {
+    font-size: 1rem;
+    color: #34495e;
+}
+
+.comments-section li strong {
+    color: #2980b9;
+    font-weight: bold;
+}
+
+.comments-section .comment-meta {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+}
+
+/* 댓글 작성 폼 */
+.comments-section-form {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.comments-section textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    resize: vertical;
+    background-color: #fff;
+    color: #34495e;
+}
+
+.comments-section textarea:focus {
+    outline: none;
+    border-color: #2980b9;
+}
+
+.comments-section .comment-btn {
+    padding: 12px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    background-color: #2980b9;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.comments-section .comment-btn:hover {
+    background-color: #1c5d84;
+}
+
+/* 댓글 작성폼 배경 */
+.comments-section-form {
+    background-color: #ecf0f1;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+/* 댓글 작성 폼 스타일 */
+.comments-section-form {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 버튼 그룹 */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.form-actions button {
+    padding: 12px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    background-color: #3498db;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-actions button:hover {
+    background-color: #2980b9;
+}
+
+.form-actions button:focus {
+    outline: none;
+}
+
+.form-actions .delete-btn {
+    background-color: #e74c3c;
+}
+
+.form-actions .delete-btn:hover {
+    background-color: #c0392b;
+}
+
+/* 댓글 액션 버튼들 (수정/삭제) */
+.comment-actions {
+    margin-top: 10px; /* 댓글 내용과 버튼 사이의 간격 */
+    font-size: 14px; /* 버튼의 글자 크기 */
+    color: #555; /* 버튼의 기본 텍스트 색상 */
+}
+
+/* 수정/삭제 버튼 */
+.comment-actions a,
+.comment-actions button {
+    margin-right: 10px; /* 버튼들 간의 간격 */
+    padding: 5px 10px; /* 버튼 안쪽 여백 */
+    text-decoration: none; /* 링크 기본 스타일 제거 */
+    cursor: pointer; /* 클릭할 수 있음을 나타내는 커서 */
+    border: 1px solid #ccc; /* 버튼 경계선 */
+    border-radius: 3px; /* 버튼 모서리 둥글게 처리 */
+    transition: all 0.3s ease; /* 마우스 오버 시 애니메이션 효과 */
+}
+
+/* 수정 버튼 스타일 */
+#comment-update, #update-insert {
+    color: #007bff; /* 수정 버튼 텍스트 색상 (파란색) */
+    background-color: #f8f9fa; /* 수정 버튼 배경색 (연한 회색) */
+}
+
+#comment-update:hover, #update-insert:hover {
+    background-color: #007bff; /* 수정 버튼에 마우스를 올리면 배경색 변경 */
+    color: white; /* 마우스를 올리면 텍스트 색상 하얀색으로 변경 */
+}
+
+/* 삭제 버튼 스타일 */
+#comment-delete, #update-cancel {
+    background-color: #f8f9fa; /* 삭제 버튼 배경색 (연한 빨간색) */
+    color: #721c24; /* 삭제 버튼 텍스트 색상 (어두운 빨간색) */
+    /*border-color: #f5c6cb; !* 삭제 버튼의 경계선 색상 *!*/
+}
+
+#comment-delete:hover, #update-cancel:hover {
+    background-color: #dc3545; /* 삭제 버튼에 마우스를 올리면 배경색 변경 */
+    color: white; /* 마우스를 올리면 텍스트 색상 하얀색으로 변경 */
+    border-color: #dc3545; /* 경계선 색상도 변경 */
+}
+
+.comment-content {
+    font-size: 16px;
+    margin-bottom: 10px;
+    cursor: pointer; /* 수정하려면 클릭 */
+}
+
+.edit-comment-form {
+    margin-top: 10px;
+}
+
+.edit-comment-form input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 5px;
+}
+
+.comment-actions a {
+    margin-right: 10px;
+    color: blue;
+    cursor: pointer;
+}
+
+
+
+/* 게시글 상세보기 영역 */
+.post-detail-main {
+    width: 1500px;
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.sub--menu {
+    min-width: 230px;
+    margin-right: 80px;
+}
+.sub--menu--top {
+    text-align: center;
+    padding: 25px 0;
+    border-bottom: 3px solid #33688F;
+}
+
+.sub--menu--mid {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+.sub--menu--table {
+    border-color: #D1D5D4;
+
+}
+.selected--menu,
+.sub--menu--table td a:hover {
+    color: #075AA4;
+    font-weight: 600;
+}
+
+#updateComment {
+    margin-bottom: 36px;
+}

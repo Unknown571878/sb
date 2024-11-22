@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Grade;
-import com.example.demo.reopository.GradeRepository;
+import com.example.demo.repository.GradeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

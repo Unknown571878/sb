@@ -4,28 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>일정</title>
+  <link rel="stylesheet" href="/css/schedule.css">
+  <style>
+    /* 기존 스타일 유지 */
+  </style>
 </head>
-<div th:replace="/fragments/header.html :: fragment-header"></div>
 <body>
+<div th:replace="/fragments/header.html :: fragment-header"></div>
 <div th:replace="/fragments/nav.html :: fragment-nav"></div>
-<link rel="stylesheet" href="/css/schedule.css">
+
 <div class="calendar-container">
   <div class="calendar-header">
-    <h2 id="calendarTitle">2024년 1월</h2>
-    <select id="monthSelector" onchange="updateCalendar()">
-      <option value="0">1월</option>
-      <option value="1">2월</option>
-      <option value="2">3월</option>
-      <option value="3">4월</option>
-      <option value="4">5월</option>
-      <option value="5">6월</option>
-      <option value="6">7월</option>
-      <option value="7">8월</option>
-      <option value="8">9월</option>
-      <option value="9">10월</option>
-      <option value="10">11월</option>
-      <option value="11">12월</option>
-    </select>
+    <button class="arrow-button" id="prevMonthButton">&lt;</button>
+    <h2 id="calendarTitle"></h2>
+    <button class="arrow-button" id="nextMonthButton">&gt;</button>
   </div>
 
   <!-- 요일 표시 -->
@@ -42,23 +34,37 @@
   <!-- 날짜 그리드 -->
   <div class="calendar-grid" id="calendarGrid">
     <!-- 날짜가 표시될 공간 -->
-</div>
+    <div th:each="day : ${days}">
+      <div class="calendar-day">
+        <span th:text="${day}"></span>
+
+        <!-- 일정 표시 -->
+        <div th:each="schedule : ${schedules}" th:if="${schedule.SDay == day}" class="schedule-box">
+          <span th:text="${schedule.title}"></span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
   const calendarGrid = document.getElementById('calendarGrid');
   const calendarTitle = document.getElementById('calendarTitle');
-  const monthSelector = document.getElementById('monthSelector');
-  const currentYear = new Date().getFullYear();
+  const prevMonthButton = document.getElementById('prevMonthButton');
+  const nextMonthButton = document.getElementById('nextMonthButton');
+
+  let currentYear = new Date().getFullYear();
+  let currentMonth = new Date().getMonth(); // 0: January, 11: December
 
   function updateCalendar() {
-    const month = parseInt(monthSelector.value);
-    const firstDayOfMonth = new Date(currentYear, month, 1).getDay();
-    const daysInMonth = new Date(currentYear, month + 1, 0).getDate();
-    const daysInPrevMonth = new Date(currentYear, month, 0).getDate();
+    const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
 
-    calendarTitle.textContent = `${currentYear}년 ${month + 1}월`;
+    // 제목 업데이트
+    calendarTitle.textContent = `${currentYear}년 ${currentMonth + 1}월`;
 
+    // 그리드 초기화
     calendarGrid.innerHTML = '';
 
     // 이전 달의 마지막 며칠 추가 (불투명 처리)
@@ -73,7 +79,10 @@
     for (let day = 1; day <= daysInMonth; day++) {
       const dayDiv = document.createElement('div');
       dayDiv.className = 'calendar-day';
-      dayDiv.textContent = day;
+
+      // 더미 데이터 추가
+      const randomEvent = Math.random() > 0.7 ? '일정' : ''; // 30% 확률로 '일정' 추가
+      dayDiv.textContent = day + (randomEvent ? ` - ${randomEvent}` : '');
       calendarGrid.appendChild(dayDiv);
     }
 
@@ -91,8 +100,27 @@
     }
   }
 
+  function changeMonth(offset) {
+    currentMonth += offset;
+
+    // 연도와 월 변경 처리
+    if (currentMonth < 0) {
+      currentMonth = 11;
+      currentYear--;
+    } else if (currentMonth > 11) {
+      currentMonth = 0;
+      currentYear++;
+    }
+
+    updateCalendar();
+  }
+
+  // 화살표 버튼 이벤트 리스너
+  prevMonthButton.addEventListener('click', () => changeMonth(-1));
+  nextMonthButton.addEventListener('click', () => changeMonth(1));
+
+  // 초기 달력 렌더링
   updateCalendar();
 </script>
-
 </body>
 </html>

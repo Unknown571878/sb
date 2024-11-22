@@ -48,7 +48,7 @@
       <tbody class="post-tbody-tr">
       <tr class="post-tbody-tr" th:if="${#lists.size(posts)} > 0" th:each="post : ${posts}">
         <td th:text="${post.pid}"></td>
-        <td class="title"><a href="/post/postDetail?pid=" th:attrappend="href=${post.pid}" th:text="${post.title}"></a></td>
+        <td class="title"><a href="/post/noticeDetail?pid=" th:attrappend="href=${post.pid}" th:text="${post.title}"></a></td>
         <td th:text="${post.name}"></td>
         <td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
         <td th:text="${post.cnt}"></td>

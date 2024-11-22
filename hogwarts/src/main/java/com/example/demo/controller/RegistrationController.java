@@ -2,8 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Department;
 import com.example.demo.entity.Registration;
-import com.example.demo.reopository.DepartmentRepository;
-import com.example.demo.reopository.RegistrationRepository;
+import com.example.demo.repository.DepartmentRepository;
+import com.example.demo.repository.RegistrationRepository;
 import com.example.demo.service.AuthInfo;
 import com.example.demo.service.MessageDto;
 import lombok.RequiredArgsConstructor;

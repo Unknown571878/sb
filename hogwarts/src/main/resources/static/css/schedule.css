@@ -1,14 +1,6 @@
-
-.calendar-wrapper {
-    display: flex;
-    justify-content: center;
-    margin-top: 120px; /* 네비게이션 바 높이 + 여백 */
-    padding-top: 20px;
-}
-
 /* 캘린더 컨테이너 스타일 */
 .calendar-container {
-    width: 800px; /* 캘린더 너비 */
+    width: 1000px; /* 캘린더 너비 증가 */
     padding: 20px;
     background-color: #ffffff;
     border: 2px solid #ddd;
@@ -50,17 +42,22 @@
     margin-top: 10px;
 }
 
+/* 날짜 칸 크기 키우기 */
 .calendar-day {
     position: relative;
-    padding: 10px;
+    display: flex;
+    flex-direction: column;  /* 세로로 텍스트 배치 */
+    justify-content: flex-start;
+    align-items: center;
+    padding: 15px;  /* 내부 여백 늘리기 */
     border: 1px solid #ddd;
     border-radius: 5px;
-    min-height: 80px;
+    min-height: 120px;  /* 최소 높이 늘리기 */
     background-color: #fafafa;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    font-size: 1em;
+    font-size: 1.2em;  /* 글자 크기 조금 키우기 */
+    box-sizing: border-box; /* padding 포함해서 크기 계산 */
+    text-align: center;
+    overflow: hidden; /* 넘치는 텍스트 숨김 */
 }
 
 /* 날짜 숫자 위치 */
@@ -73,8 +70,37 @@
     color: #333;
 }
 
+/* 텍스트가 들어갈 공간 설정 */
+.schedule-box {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    right: 5px;
+    background-color: #f9f9f9;
+    padding: 5px;
+    font-size: 14px;  /* 텍스트 크기 좀 더 키우기 */
+    border: 1px solid #ccc;
+    text-align: center;
+    box-sizing: border-box;
+}
+
 /* 이전 달/다음 달의 날짜 스타일 */
 .calendar-day.extra {
     color: #aaa;
     background-color: #f0f0f0;
+}
+
+/* 화살표 버튼 스타일 */
+.arrow-button {
+    cursor: pointer;
+    font-size: 18px;
+    padding: 5px 10px;
+    border: none;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.arrow-button:hover {
+    background-color: #ddd;
 }

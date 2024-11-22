@@ -1,14 +1,16 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Schedule;
 import com.example.demo.entity.Comment;
 import com.example.demo.entity.Post;
-import com.example.demo.reopository.CommentRepository;
-import com.example.demo.reopository.PostRepository;
+import com.example.demo.repository.CommentRepository;
+import com.example.demo.repository.PostRepository;
+import com.example.demo.repository.ScheduleRepository;
 import com.example.demo.service.MessageDto;
 import com.example.demo.service.PostService;
+import com.example.demo.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -18,8 +20,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -34,9 +36,22 @@ public class PostController {
 
     private final CommentRepository commentRepository;
 
+    private final ScheduleRepository scheduleRepository;
+
+    private final ScheduleService scheduleService;
+
     private String showMessageAndRedirect(final MessageDto params, Model model) {
         model.addAttribute("params", params);
         return "/common/messageRedirect";
+    }
+
+    private List<String> generateDays(String year, String month) {
+        List<String> days = new ArrayList<>();
+        int totalDays = java.time.YearMonth.of(Integer.parseInt(year), Integer.parseInt(month)).lengthOfMonth();
+        for (int i = 1; i <= totalDays; i++) {
+            days.add(String.format("%02d", i)); // 두 자릿수로 일자를 맞추기
+        }
+        return days;
     }
 
     @GetMapping("/notice")
@@ -70,12 +85,22 @@ public class PostController {
 
     @GetMapping("/schedule")
     public String schedule(Model model) {
-        LocalDate now = LocalDate.now();
-        int getMonth = now.getMonth().getValue();
-        String month = getMonth + "월";
-        model.addAttribute("month", month);
+        String currentYear = String.valueOf(java.time.LocalDate.now().getYear());
+        String currentMonth = String.format("%02d", java.time.LocalDate.now().getMonthValue());
+
+        // 달력에 표시할 일자 목록 생성
+        List<String> days = generateDays(currentYear, currentMonth); // 달력 날짜 계산 함수
+
+        // 일정 목록 가져오기
+        List<Schedule> schedules = scheduleService.getSchedulesByDate(currentYear, currentMonth, "01"); // 예시로 1일의 일정만 조회
+
+        // 모델에 데이터 추가
+        model.addAttribute("days", days);
+        model.addAttribute("schedules", schedules);
+
         return "/post/schedule";
     }
+
 
     @GetMapping("/postInsertForm")
     public String postInsertForm() {
@@ -155,5 +180,12 @@ public class PostController {
         commentRepository.save(update);
         MessageDto message = new MessageDto("수정되었습니다", "/post/postDetail?pid=" + pid, RequestMethod.GET, null);
         return showMessageAndRedirect(message, model);
+    }
+
+    @GetMapping("/noticeDetail")
+    public String noticeDetail(@RequestParam("pid") Long pid, Model model) {
+        Post post = postRepository.findById(pid).orElse(null);
+        model.addAttribute("post", post);
+        return "/post/noticeDetail";
     }
 }

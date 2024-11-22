@@ -4,10 +4,10 @@ import com.example.demo.entity.Department;
 import com.example.demo.entity.Grade;
 import com.example.demo.entity.Registration;
 import com.example.demo.entity.Users;
-import com.example.demo.reopository.DepartmentRepository;
-import com.example.demo.reopository.GradeRepository;
-import com.example.demo.reopository.RegistrationRepository;
-import com.example.demo.reopository.UsersRepository;
+import com.example.demo.repository.DepartmentRepository;
+import com.example.demo.repository.GradeRepository;
+import com.example.demo.repository.RegistrationRepository;
+import com.example.demo.repository.UsersRepository;
 import com.example.demo.service.AuthInfo;
 import com.example.demo.service.GradeService;
 import com.example.demo.service.MessageDto;
@@ -24,7 +24,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor

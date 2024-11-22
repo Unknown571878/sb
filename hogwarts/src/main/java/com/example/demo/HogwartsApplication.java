@@ -1,13 +1,7 @@
 package com.example.demo;
 
-import com.example.demo.entity.Department;
-import com.example.demo.entity.Grade;
-import com.example.demo.entity.Post;
-import com.example.demo.entity.Users;
-import com.example.demo.reopository.DepartmentRepository;
-import com.example.demo.reopository.GradeRepository;
-import com.example.demo.reopository.PostRepository;
-import com.example.demo.reopository.UsersRepository;
+import com.example.demo.entity.*;
+import com.example.demo.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -30,6 +24,8 @@ public class HogwartsApplication {
     private final PostRepository postRepository;
 
     private final DepartmentRepository departmentRepository;
+
+    private final ScheduleRepository AScheduleRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(HogwartsApplication.class, args);
@@ -319,5 +315,78 @@ public class HogwartsApplication {
                         .build()
         );
         postRepository.saveAll(noticeList);
+
+        List<Schedule> ASchedules = Arrays.asList(
+                Schedule.builder()
+                        .title("1학기 수업 시작")
+                        .sYear("2024")
+                        .sMonth("03")
+                        .sDay("02")
+                        .build(),
+
+        Schedule.builder()
+                .title("2학기 수업 시작")
+                .sYear("2024")
+                .sMonth("09")
+                .sDay("01")
+                .build(),
+
+        Schedule.builder()
+                .title("중간고사 기간")
+                .sYear("2024")
+                .sMonth("04")
+                .sDay("10")
+                .build(),
+
+        Schedule.builder()
+                .title("기말고사 기간")
+                .sYear("2024")
+                .sMonth("06")
+                .sDay("10")
+                .build(),
+
+        Schedule.builder()
+                .title("여름 방학 시작")
+                .sYear("2024")
+                .sMonth("06")
+                .sDay("20")
+                .build(),
+
+        Schedule.builder()
+                .title("겨울 방학 시작")
+                .sYear("2024")
+                .sMonth("12")
+                .sDay("20")
+                .build(),
+
+        Schedule.builder()
+                .title("신입생 오리엔테이션")
+                .sYear("2024")
+                .sMonth("02")
+                .sDay("25")
+                .build(),
+
+        Schedule.builder()
+                .title("종강일")
+                .sYear("2024")
+                .sMonth("06")
+                .sDay("15")
+                .build(),
+
+        Schedule.builder()
+                .title("학사일정 조정")
+                .sYear("2024")
+                .sMonth("05")
+                .sDay("10")
+                .build(),
+
+        Schedule.builder()
+                .title("교직원 회의")
+                .sYear("2024")
+                .sMonth("04")
+                .sDay("05")
+                .build()
+        );
+        AScheduleRepository.saveAll(ASchedules);
     }
 }
