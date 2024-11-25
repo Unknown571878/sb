@@ -70,7 +70,7 @@ public class GradeController {
     @GetMapping("/info/gradeList")
     public String gradeList(Model model, HttpSession session){
         AuthInfo authInfo = (AuthInfo) session.getAttribute("authInfo");
-        List<Department> departments = departmentRepository.findByProfessor(authInfo.getId());
+        List<Department> departments = departmentRepository.findByProfessorAndPermission(authInfo.getId(), true);
         model.addAttribute("departments", departments);
         return "/info/gradeList";
     }

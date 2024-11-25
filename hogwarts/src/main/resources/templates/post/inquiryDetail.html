@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>문의하기</title>
+  <link rel="stylesheet" href="/css/inquiryDetail.css">
+</head>
+<body>
+<div th:replace="/fragments/header.html :: fragment-header"></div>
+<div th:replace="/fragments/nav.html :: fragment-nav"></div>
+<div class="d-flex justify-content-center align-items-start" style="min-width: 100em;">
+  <div class="sub--menu">
+    <div class="sub--menu--top">
+      <h2>게시판</h2>
+    </div>
+    <!-- 메뉴 -->
+    <!-- 선택된 메뉴에 class="selected--menu" 추가해주세요 -->
+    <div class="sub--menu--mid">
+      <table class="sub--menu--table" border="1">
+        <tr>
+          <td><a href="/post/notice">공지사항</a></td>
+        </tr>
+        <tr>
+          <td><a href="/post/postList">자유게시판</a></td>
+        </tr>
+        <tr>
+          <td><a href="/post/inquiryList" class="selected--menu">문의하기</a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="post-detail-main">
+    <div class="container">
+      <!-- 게시글 내용 표시 -->
+      <div class="post-detail">
+        <h2 th:text="${main.title}">제목</h2>
+        <p class="post-meta">
+          <span th:text="'작성자: ' + ${main.name}">작성자</span>|
+          <span th:text="'작성일: ' + ${#temporals.format(main.createAt, 'yyyy-MM-dd HH:mm:ss')}">작성일</span>
+        </p>
+        <div class="post-content">
+          <p th:text="${main.content}">게시글 내용</p>
+        </div>
+        <div th:each="inquiry : ${inquirys}" th:if="${inquirys != null}">
+          <div class="post-content" style="text-align: right">
+            <p th:text="${inquiry.content}"></p>
+          </div>
+        </div>
+      <!-- 게시글 수정, 삭제, 목록으로 돌아가기 버튼 -->
+      <div class="form-actions" t>
+        <button onclick="window.location.href='/post/postList';">목록으로 돌아가기</button>
+        <form th:action="@{/post/postDelete/{pid}(pid=${main.id})}" method="POST" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+          <button onclick="window.location.href='/post/postList';">목록으로 돌아가기</button>
+          <button type="submit">삭제</button>
+        </form>
+      </div>
+        <div class="form-actions">
+          <button onclick="window.location.href='/post/postList';">목록으로 돌아가기</button>
+          <form th:action="@{/post/postDelete/{pid}(pid=${main.id})}" method="POST" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+            <button onclick="window.location.href='/post/postList';">목록으로 돌아가기</button>
+            <button type="submit">삭제</button>
+          </form>
+        </div>
+    </div>
+  </div>
+</div>
+<script>
+  function btnClick() {
+
+    const mydiv = document.getElementById('user-comment');
+    const delete_btn = document.getElementById('comment-delete')
+    const update_btn = document.getElementById('comment-update')
+    const update_text = document.getElementById("updateComment")
+    const cancel = document.getElementById('update-cancel')
+    const update_input = document.getElementById('update-insert')
+
+    if(mydiv.style.display === 'none') {
+
+      mydiv.style.display = '';
+      update_text.style.display = 'none';
+      delete_btn.style.display = '';
+      update_btn.style.display = '';
+      cancel.style.display = 'none';
+      update_input.style.display = 'none';
+
+    }else {
+
+      mydiv.style.display = 'none';
+      update_text.style.display = '';
+      delete_btn.style.display = 'none';
+      update_btn.style.display = 'none';
+      cancel.style.display = '';
+      update_input.style.display = '';
+
+    }
+
+  }
+</script>
+</body>
+</html>

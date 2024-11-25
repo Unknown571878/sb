@@ -10,5 +10,6 @@ import java.util.List;
 @Repository
 public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
     public List<Inquiry> findAllByOrderByPidDesc();
-    public List<Inquiry> findByTypeOrderByPidDesc(String type);
+    public List<Inquiry> findByTypeAndUidOrderByPidDesc(String type, String uid);
+    public List<Inquiry> findByPidAndTypeOrderByCreateAtDesc(Long pid, String type);
 }

@@ -62,7 +62,7 @@
               <button id="update-insert" style="display: none" type="submit">입력</button>
                 </div>
               </form>
-              <div class="comment-actions" th:if="${session.authInfo.uid.equals(comment.userId)}" style="display: inline">
+              <div class="comment-actions" th:if="${session.authInfo.uid.equals(comment.userId) or session.authInfo.job.equals('관리자')}" style="display: inline">
                 <!-- 수정 버튼 -->
                 <button onclick='btnClick()' id="comment-update">수정</button>
                 <!-- 삭제 버튼 -->
@@ -87,7 +87,7 @@
       </div>
 
       <!-- 게시글 수정, 삭제, 목록으로 돌아가기 버튼 -->
-      <div class="form-actions" th:if="${session.authInfo.uid.equals(post.userid)}">
+      <div class="form-actions" th:if="${session.authInfo.uid.equals(post.userid) or session.authInfo.job.equals('관리자')}">
         <button onclick="window.location.href='/post/postList';">목록으로 돌아가기</button>
         <form th:action="@{/post/postInsertForm/{pid}(pid=${post.pid})}" method="POST">
           <button type="submit">수정</button>

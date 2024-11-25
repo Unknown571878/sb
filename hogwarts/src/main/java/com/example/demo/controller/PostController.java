@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Inquiry;
 import com.example.demo.repository.InquiryRepository;
+import com.example.demo.service.AuthInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.demo.entity.Schedule;
 import com.example.demo.entity.Comment;
@@ -229,8 +230,9 @@ public class PostController {
     }
 
     @GetMapping("/inquiryList")
-    public String inquiryList(Model model, @PageableDefault(page=0,size=20) Pageable pageable) {
-        List<Inquiry> posts = inquiryRepository.findByTypeOrderByPidDesc("question");
+    public String inquiryList(Model model, @PageableDefault(page=0,size=20) Pageable pageable, HttpSession session) {
+        AuthInfo authInfo = (AuthInfo) session.getAttribute("authInfo");
+        List<Inquiry> posts = inquiryRepository.findByTypeAndUidOrderByPidDesc("question", authInfo.getId());
         // 페이지 정보에 따라 현재 페이지의 시작 인덱스를 계산
         final int start = (int) pageable.getOffset();
         // 현재 페이지의 끝 인덱스를 계산하되, 목록 크기를 초과하지 않도록 함
@@ -263,5 +265,14 @@ public class PostController {
         inquiryRepository.save(newInquiry);
         MessageDto message = new MessageDto("등록되었습니다", "/post/inquiryList", RequestMethod.GET, null);
         return showMessageAndRedirect(message, model);
+    }
+
+    @GetMapping("/inquiryDetail")
+    public String inquiryDetail(@RequestParam("id") Long id, Model model) {
+        List<Inquiry> detail = inquiryRepository.findByPidAndTypeOrderByCreateAtDesc(id, "answer");
+        Inquiry main = inquiryRepository.findById(id).orElse(null);
+        model.addAttribute("inquirys", detail);
+        model.addAttribute("main", main);
+        return "/post/inquiryDetail";
     }
 }

@@ -50,7 +50,7 @@
         <!-- 데이터 반복 출력 -->
         <tr th:each="department : ${departments}">
           <td th:text="${department.id}"></td>
-          <td><a href="/registration/attendance?id=" th:attrappend="href=${department.id}" th:text="${department.name}"></a></td>
+          <td th:text="${department.name}"></td>
           <td th:text="${department.code}"></td>
           <td th:text="${department.apply_credit}"></td>
           <td th:text="${department.time}"></td>

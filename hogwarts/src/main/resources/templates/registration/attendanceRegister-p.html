@@ -32,38 +32,30 @@
     <div class="main-title">
       <h1>출석부</h1>
       <div class="split-div-post"></div>
-      <form action="/submit-attendance" method="POST" class="attendance-form">
+      <form action="/registration/submit-attendance" method="POST" class="attendance-form">
         <table class="table-custom" cellpadding="10">
           <thead>
           <tr>
+            <th>학번</th>
             <th>학생 이름</th>
             <th>출석</th>
             <th>지각</th>
             <th>결석</th>
+            <th>조퇴</th>
           </tr>
           </thead>
           <tbody>
-          <tr>
-            <td>홍길동</td>
-            <td><input type="radio" name="attendance_1" value="출석" required> 출석</td>
-            <td><input type="radio" name="attendance_1" value="지각"> 지각</td>
-            <td><input type="radio" name="attendance_1" value="결석"> 결석</td>
-          </tr>
-          <tr>
-            <td>김철수</td>
-            <td><input type="radio" name="attendance_2" value="출석" required> 출석</td>
-            <td><input type="radio" name="attendance_2" value="지각"> 지각</td>
-            <td><input type="radio" name="attendance_2" value="결석"> 결석</td>
-          </tr>
-          <tr>
-            <td>이영희</td>
-            <td><input type="radio" name="attendance_3" value="출석" required> 출석</td>
-            <td><input type="radio" name="attendance_3" value="지각"> 지각</td>
-            <td><input type="radio" name="attendance_3" value="결석"> 결석</td>
+          <tr th:each="user : ${users}">
+            <td th:text="${user.id}" id="id" th:value="${user.id}">12313</td>
+            <td th:text="${user.name}" id="name" th:value="${user.name}">홍길동</td>
+            <td><input type="radio" th:name="'attendance-'+${user.id}+''" value="출석" required> 출석</td>
+            <td><input type="radio" th:name="'attendance-'+${user.id}+''" value="지각"> 지각</td>
+            <td><input type="radio" th:name="'attendance-'+${user.id}+''" value="결석"> 결석</td>
+            <td><input type="radio" th:name="'attendance-'+${user.id}+''" value="조퇴"> 조퇴</td>
           </tr>
           </tbody>
         </table>
-
+        <input type="hidden" id="code" name="code" th:value="${code}">
         <div class="submit-button-container">
           <button type="submit" class="submit-button">출석 제출</button>
         </div>

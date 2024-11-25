@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>성적 입력</title>
-  <link rel="stylesheet" href="/css/registration-p.css">
+  <link rel="stylesheet" href="/css/createDepartment.css">
 </head>
 <div th:replace="/fragments/header.html :: fragment-header"></div>
 <body>
@@ -15,8 +15,6 @@
     <div class="sub--menu--top">
       <h2>강의</h2>
     </div>
-    <!-- 메뉴 -->
-    <!-- 선택된 메뉴에 class="selected--menu" 추가해주세요 -->
     <div class="sub--menu--mid">
       <table class="sub--menu--table" border="1">
         <tr>
@@ -32,33 +30,68 @@
     <div class="main-title">
       <h1>강의 개설 신청</h1>
       <div class="split--div-post"></div>
-      <form action="/submitApplication" method="POST">
-        <div>
-          <label for="name">강의명</label>
-          <input type="text" id="name" name="name" required>
+      <form action="/registration/submitApplication" method="POST" class="lecture-form">
+        <input type="hidden" id="professor" name="professor" th:value="${session.authInfo.id}">
+        <input type="hidden" id="professor_name" name="professor_name" th:value="${session.authInfo.name}">
+        <div class="form-group">
+          <label for="name" class="form-label">강의명</label>
+          <input type="text" id="name" name="name" class="form-input" required>
         </div>
-        <div>
-          <label for="code">강의 코드</label>
-          <input type="text" id="code" name="code" required>
+        <div class="form-group">
+          <label for="code" class="form-label">강의 코드</label>
+          <input type="text" id="code" name="code" class="form-input" required>
         </div>
-        <div>
-          <label for="time">시간</label>
-          <input type="text" id="time" name="time" required>
+        <div class="form-group">
+          <label for="start-time" class="form-label">시작 시간</label>
+          <select id="start-time" name="start-time" class="form-select" required>
+            <option value="" disabled selected>시작 시간을 선택하세요</option>
+            <option value="09:00">09:00</option>
+            <option value="10:00">10:00</option>
+            <option value="11:00">11:00</option>
+            <option value="12:00">12:00</option>
+            <option value="13:00">13:00</option>
+            <option value="14:00">14:00</option>
+            <option value="15:00">15:00</option>
+            <option value="16:00">16:00</option>
+            <option value="17:00">17:00</option>
+          </select>
         </div>
-        <div>
-          <label for="week">요일</label>
-          <input type="text" id="week" name="week" required>
+        <div class="form-group">
+          <label for="end-time" class="form-label">종료 시간</label>
+          <select id="end-time" name="end-time" class="form-select" required>
+            <option value="" disabled selected>종료 시간을 선택하세요</option>
+            <option value="9:50">9:50</option>
+            <option value="10:50">10:50</option>
+            <option value="11:50">11:50</option>
+            <option value="12:50">12:50</option>
+            <option value="13:50">13:50</option>
+            <option value="14:50">14:50</option>
+            <option value="15:50">15:50</option>
+            <option value="16:50">16:50</option>
+            <option value="17:50">17:50</option>
+          </select>
         </div>
-        <div>
-          <label for="apply_credit">이수 학점</label>
-          <input type="number" id="apply_credit" name="apply_credit" min="1" required>
+        <div class="form-group">
+          <label for="week" class="form-label">요일</label>
+          <select id="week" name="week" class="form-select" required>
+            <option value="" disabled selected>요일을 선택하세요</option>
+            <option value="월요일">월요일</option>
+            <option value="화요일">화요일</option>
+            <option value="수요일">수요일</option>
+            <option value="목요일">목요일</option>
+            <option value="금요일">금요일</option>
+          </select>
         </div>
-        <div>
-          <label for="headCount">수강 정원</label>
-          <input type="number" id="headCount" name="headCount" min="1" required>
+        <div class="form-group">
+          <label for="apply_credit" class="form-label">이수 학점</label>
+          <input type="number" id="apply_credit" name="apply_credit" class="form-input" min="1" required>
         </div>
-        <div>
-          <button type="submit">강의 개설 신청하기</button>
+        <div class="form-group">
+          <label for="headCount" class="form-label">수강 정원</label>
+          <input type="number" id="headCount" name="headCount" class="form-input" min="1" required>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="form-button">강의 개설 신청하기</button>
         </div>
       </form>
     </div>

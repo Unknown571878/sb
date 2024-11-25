@@ -34,4 +34,6 @@ public class Department {
     private int headCount;
     private boolean evaluation; // 평가
     private boolean permission;
+    @Builder.Default
+    private int count = 0;
 }

@@ -27,6 +27,8 @@ public class HogwartsApplication {
 
     private final ScheduleRepository AScheduleRepository;
 
+    private final RegistrationRepository registrationRepository;
+
     public static void main(String[] args) {
         SpringApplication.run(HogwartsApplication.class, args);
     }
@@ -348,5 +350,16 @@ public class HogwartsApplication {
                 Schedule.builder().title("졸업식").scheduleDate(LocalDate.of(2024, 2, 15)).build()
         );
         AScheduleRepository.saveAll(ASchedules);
+
+        Registration registration = Registration.builder()
+                .pid("120101")
+                .sid("2301001")
+                .code("CS302").build();
+        registrationRepository.save(registration);
+        Registration registration2 = Registration.builder()
+                .pid("120101")
+                .sid("2301002")
+                .code("CS302").build();
+        registrationRepository.save(registration2);
     }
 }

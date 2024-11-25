@@ -22,4 +22,13 @@ public class Registration {
     private String code; // 신청 과목 번호
     private String pid; // 교번
     private String sid; // 학번
+
+    @Builder.Default
+    private int attendance=0; //출석
+    @Builder.Default
+    private int absence=0; //결석
+    @Builder.Default
+    private int perception=0; //지각
+    @Builder.Default
+    private int leave=0; //조퇴
 }

@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface RegistrationRepository extends JpaRepository<Registration, Long> {
     public List<Registration> findByCode(String code);
+    public Registration findBySidAndCode(String sid, String code);
 }
