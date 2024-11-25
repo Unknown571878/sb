@@ -34,36 +34,10 @@
             <div class="main--page--split"></div>
             <table>
 
-              <tr>
-                <td>01-27&nbsp;-&nbsp;02-01</td>
-                <td>2023-1학기 예비수강신청</td>
+              <tr th:each="schedule, iterStat : ${schedules}" th:if="${iterStat.index < 6}">
+                <td th:text="${schedule.scheduleDate}">01-27&nbsp;-&nbsp;02-01</td>
+                <td th:text="${schedule.title}">2023-1학기 예비수강신청</td>
               </tr>
-
-              <tr>
-                <td>02-13&nbsp;-&nbsp;02-17</td>
-                <td>2023-1학기 수강신청</td>
-              </tr>
-
-              <tr>
-                <td>02-17&nbsp;-&nbsp;02-23</td>
-                <td>2023-1학기 등록</td>
-              </tr>
-
-              <tr>
-                <td>02-22&nbsp;-&nbsp;02-22</td>
-                <td>복학 접수 마감</td>
-              </tr>
-
-              <tr>
-                <td>02-26&nbsp;-&nbsp;02-26</td>
-                <td>졸업예배</td>
-              </tr>
-
-              <tr>
-                <td>02-27&nbsp;-&nbsp;02-27</td>
-                <td>학위수여식</td>
-              </tr>
-
             </table>
 
           </div>

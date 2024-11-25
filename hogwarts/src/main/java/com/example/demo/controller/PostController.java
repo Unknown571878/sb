@@ -1,5 +1,8 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Inquiry;
+import com.example.demo.repository.InquiryRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.demo.entity.Schedule;
 import com.example.demo.entity.Comment;
 import com.example.demo.entity.Post;
@@ -8,8 +11,8 @@ import com.example.demo.repository.PostRepository;
 import com.example.demo.repository.ScheduleRepository;
 import com.example.demo.service.MessageDto;
 import com.example.demo.service.PostService;
-import com.example.demo.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -20,9 +23,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequiredArgsConstructor
@@ -38,20 +45,11 @@ public class PostController {
 
     private final ScheduleRepository scheduleRepository;
 
-    private final ScheduleService scheduleService;
+    private final InquiryRepository inquiryRepository;
 
     private String showMessageAndRedirect(final MessageDto params, Model model) {
         model.addAttribute("params", params);
         return "/common/messageRedirect";
-    }
-
-    private List<String> generateDays(String year, String month) {
-        List<String> days = new ArrayList<>();
-        int totalDays = java.time.YearMonth.of(Integer.parseInt(year), Integer.parseInt(month)).lengthOfMonth();
-        for (int i = 1; i <= totalDays; i++) {
-            days.add(String.format("%02d", i)); // 두 자릿수로 일자를 맞추기
-        }
-        return days;
     }
 
     @GetMapping("/notice")
@@ -84,22 +82,63 @@ public class PostController {
     }
 
     @GetMapping("/schedule")
-    public String schedule(Model model) {
-        String currentYear = String.valueOf(java.time.LocalDate.now().getYear());
-        String currentMonth = String.format("%02d", java.time.LocalDate.now().getMonthValue());
+    public String schedule(@RequestParam(required = false) Integer year,
+                           @RequestParam(required = false) Integer month,
+                           Model model) {
+        // 현재 연도와 월 기본값 설정
+        LocalDate currentDate = LocalDate.now();
+        int currentYear = (year != null) ? year : currentDate.getYear();
+        int currentMonth = (month != null) ? month : currentDate.getMonthValue();
 
-        // 달력에 표시할 일자 목록 생성
-        List<String> days = generateDays(currentYear, currentMonth); // 달력 날짜 계산 함수
+        // 현재 월의 첫 날과 마지막 날 계산
+        YearMonth yearMonth = YearMonth.of(currentYear, currentMonth);
+        LocalDate startOfMonth = yearMonth.atDay(1);
+        LocalDate endOfMonth = yearMonth.atEndOfMonth();
 
-        // 일정 목록 가져오기
-        List<Schedule> schedules = scheduleService.getSchedulesByDate(currentYear, currentMonth, "01"); // 예시로 1일의 일정만 조회
+        // 첫 날의 요일 가져오기 (일요일 = 0, 월요일 = 1, ...)
+        int startDayOfWeek = startOfMonth.getDayOfWeek().getValue() % 7;
 
-        // 모델에 데이터 추가
+        // 현재 월의 모든 날짜 생성
+        List<Integer> days = new ArrayList<>();
+
+        // 이전 달의 빈 칸 채우기
+        for (int i = 0; i < startDayOfWeek; i++) {
+            days.add(null); // null은 빈 칸으로 처리
+        }
+
+        // 현재 달의 날짜 추가
+        for (int i = 1; i <= yearMonth.lengthOfMonth(); i++) {
+            days.add(i);
+        }
+
+        // 다음 달의 빈 칸 채우기 (7로 나눠 떨어지지 않을 경우)
+        int remainingCells = 7 - (days.size() % 7);
+        if (remainingCells < 7) {
+            for (int i = 0; i < remainingCells; i++) {
+                days.add(null);
+            }
+        }
+
+        // 일정 가져오기
+        List<Schedule> schedules = scheduleRepository.findByScheduleDateBetween(startOfMonth, endOfMonth);
+
+        // 이전/다음 월 계산
+        LocalDate prevMonth = startOfMonth.minusMonths(1);
+        LocalDate nextMonth = startOfMonth.plusMonths(1);
+
+        // 모델 데이터 추가
+        model.addAttribute("currentYear", currentYear);
+        model.addAttribute("currentMonth", currentMonth);
+        model.addAttribute("prevYear", prevMonth.getYear());
+        model.addAttribute("prevMonth", prevMonth.getMonthValue());
+        model.addAttribute("nextYear", nextMonth.getYear());
+        model.addAttribute("nextMonth", nextMonth.getMonthValue());
         model.addAttribute("days", days);
         model.addAttribute("schedules", schedules);
 
-        return "/post/schedule";
+        return "post/schedule"; // HTML 템플릿 경로
     }
+
 
 
     @GetMapping("/postInsertForm")
@@ -187,5 +226,42 @@ public class PostController {
         Post post = postRepository.findById(pid).orElse(null);
         model.addAttribute("post", post);
         return "/post/noticeDetail";
+    }
+
+    @GetMapping("/inquiryList")
+    public String inquiryList(Model model, @PageableDefault(page=0,size=20) Pageable pageable) {
+        List<Inquiry> posts = inquiryRepository.findByTypeOrderByPidDesc("question");
+        // 페이지 정보에 따라 현재 페이지의 시작 인덱스를 계산
+        final int start = (int) pageable.getOffset();
+        // 현재 페이지의 끝 인덱스를 계산하되, 목록 크기를 초과하지 않도록 함
+        final int end = Math.min((start + pageable.getPageSize()), posts.size());
+        // 현재 페이지의 아이템 서브리스트를 포함하는 Page 객체 생성
+        final Page<Inquiry> page = new PageImpl<>(posts.subList(start, end), pageable, posts.size());
+        // 페이지 객체를 모델에 추가하여 뷰에서 접근 가능하도록 함
+        model.addAttribute("inquirys", page);
+        return "/post/inquiryList";
+    }
+
+    @GetMapping("/inquiryInsertForm")
+    public String inquiryInsertForm() {
+        return "/post/inquiryInsertForm";
+    }
+
+    @PostMapping("/inquiryInsert")
+    public String inquiryInsert(@ModelAttribute Inquiry inquiry, Model model) {
+        Inquiry newInquiry = Inquiry.builder()
+                .uid(inquiry.getUid())
+                .name(inquiry.getName())
+                .title(inquiry.getTitle())
+                .content(inquiry.getContent())
+                .createAt(LocalDate.now())
+                .type("question")
+                .answer(false)
+                .build();
+        newInquiry = inquiryRepository.save(newInquiry);
+        newInquiry.setPid(newInquiry.getId());
+        inquiryRepository.save(newInquiry);
+        MessageDto message = new MessageDto("등록되었습니다", "/post/inquiryList", RequestMethod.GET, null);
+        return showMessageAndRedirect(message, model);
     }
 }

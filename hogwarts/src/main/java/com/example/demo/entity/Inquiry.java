@@ -11,17 +11,21 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDate;
 
-
 @Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Schedule {
-
+public class Inquiry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long pid;
+    private String uid;
+    private String name;
     private String title;
-    private LocalDate scheduleDate;
+    private String content;
+    private LocalDate createAt;
+    private String type;
+    private boolean answer;
 }

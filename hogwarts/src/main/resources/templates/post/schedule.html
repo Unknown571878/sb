@@ -5,19 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>일정</title>
   <link rel="stylesheet" href="/css/schedule.css">
-  <style>
-    /* 기존 스타일 유지 */
-  </style>
 </head>
 <body>
+<!-- 헤더 -->
 <div th:replace="/fragments/header.html :: fragment-header"></div>
+<!-- 네비게이션 -->
 <div th:replace="/fragments/nav.html :: fragment-nav"></div>
-
+<div class="d-flex justify-content-center align-items-start" style="min-width: 100em;">
+  <!-- 세부 메뉴 div-->
+  <div class="schedule-list">
+    <div class="sub--menu--top">
+      <h2 th:text="${currentMonth} + '월 일정'"></h2>
+    </div>
+    <!-- 메뉴 -->
+    <!-- 선택된 메뉴에 class="selected--menu" 추가해주세요 -->
+    <div class="sub--menu--mid">
+      <table class="sub--menu--table" th:each="schedule : ${schedules}" th:if="${!schedules.isEmpty()}">
+        <tr>
+          <td th:text="${schedule.scheduleDate +' | '+ schedule.title}"></td>
+        </tr>
+      </table>
+      <table class="sub--menu--table" th:if="${schedules.isEmpty()}">
+        <tr>
+          <td><h3 style="text-align:center">이번 달 일정이 없습니다</h3></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="main--container">
+<!-- 캘린더 -->
 <div class="calendar-container">
   <div class="calendar-header">
-    <button class="arrow-button" id="prevMonthButton">&lt;</button>
-    <h2 id="calendarTitle"></h2>
-    <button class="arrow-button" id="nextMonthButton">&gt;</button>
+    <a th:href="@{/post/schedule(year=${prevYear}, month=${prevMonth})}" class="arrow-button">&lt;</a>
+    <h2>
+      <span th:text="${currentYear} + '년 ' + ${currentMonth} + '월'"></span>
+    </h2>
+    <a th:href="@{/post/schedule(year=${nextYear}, month=${nextMonth})}" class="arrow-button">&gt;</a>
   </div>
 
   <!-- 요일 표시 -->
@@ -32,95 +55,21 @@
   </div>
 
   <!-- 날짜 그리드 -->
-  <div class="calendar-grid" id="calendarGrid">
-    <!-- 날짜가 표시될 공간 -->
-    <div th:each="day : ${days}">
-      <div class="calendar-day">
-        <span th:text="${day}"></span>
+  <div id="calendarGrid" class="calendar-grid">
+    <div th:each="day : ${days}" class="calendar-day">
+      <span th:if="${day != null}" th:text="${day}"></span>
 
-        <!-- 일정 표시 -->
-        <div th:each="schedule : ${schedules}" th:if="${schedule.SDay == day}" class="schedule-box">
-          <span th:text="${schedule.title}"></span>
-        </div>
+      <!-- 해당 날짜의 일정 표시 -->
+      <div th:each="schedule : ${schedules}"
+           th:if="${schedule.scheduleDate.dayOfMonth == day}"
+           class="schedule-box">
+        <span th:text="${schedule.title}"></span>
       </div>
     </div>
   </div>
 </div>
-
-<script>
-  const calendarGrid = document.getElementById('calendarGrid');
-  const calendarTitle = document.getElementById('calendarTitle');
-  const prevMonthButton = document.getElementById('prevMonthButton');
-  const nextMonthButton = document.getElementById('nextMonthButton');
-
-  let currentYear = new Date().getFullYear();
-  let currentMonth = new Date().getMonth(); // 0: January, 11: December
-
-  function updateCalendar() {
-    const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
-    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-    const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
-
-    // 제목 업데이트
-    calendarTitle.textContent = `${currentYear}년 ${currentMonth + 1}월`;
-
-    // 그리드 초기화
-    calendarGrid.innerHTML = '';
-
-    // 이전 달의 마지막 며칠 추가 (불투명 처리)
-    for (let i = firstDayOfMonth - 1; i >= 0; i--) {
-      const dayDiv = document.createElement('div');
-      dayDiv.className = 'calendar-day extra';
-      dayDiv.textContent = daysInPrevMonth - i;
-      calendarGrid.appendChild(dayDiv);
-    }
-
-    // 현재 월 날짜 추가
-    for (let day = 1; day <= daysInMonth; day++) {
-      const dayDiv = document.createElement('div');
-      dayDiv.className = 'calendar-day';
-
-      // 더미 데이터 추가
-      const randomEvent = Math.random() > 0.7 ? '일정' : ''; // 30% 확률로 '일정' 추가
-      dayDiv.textContent = day + (randomEvent ? ` - ${randomEvent}` : '');
-      calendarGrid.appendChild(dayDiv);
-    }
-
-    // 다음 달의 첫 며칠 추가 (불투명 처리)
-    const totalCells = firstDayOfMonth + daysInMonth;
-    const extraDays = 7 - (totalCells % 7);
-
-    if (extraDays < 7) {
-      for (let i = 1; i <= extraDays; i++) {
-        const dayDiv = document.createElement('div');
-        dayDiv.className = 'calendar-day extra';
-        dayDiv.textContent = i;
-        calendarGrid.appendChild(dayDiv);
-      }
-    }
-  }
-
-  function changeMonth(offset) {
-    currentMonth += offset;
-
-    // 연도와 월 변경 처리
-    if (currentMonth < 0) {
-      currentMonth = 11;
-      currentYear--;
-    } else if (currentMonth > 11) {
-      currentMonth = 0;
-      currentYear++;
-    }
-
-    updateCalendar();
-  }
-
-  // 화살표 버튼 이벤트 리스너
-  prevMonthButton.addEventListener('click', () => changeMonth(-1));
-  nextMonthButton.addEventListener('click', () => changeMonth(1));
-
-  // 초기 달력 렌더링
-  updateCalendar();
-</script>
+</div>
+  </div>
+</div>
 </body>
 </html>

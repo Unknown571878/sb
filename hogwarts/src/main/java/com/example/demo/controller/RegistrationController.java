@@ -93,4 +93,19 @@ public class RegistrationController {
             return showMessageAndRedirect(message, model);
         }
     }
+    @GetMapping("/application-p")
+    public String application_pPage(Model model, HttpSession session) {
+        AuthInfo authInfo = (AuthInfo)session.getAttribute("authInfo");
+        List<Department> departments = departmentRepository.findByProfessorOrderByIdDesc(authInfo.getId());
+        model.addAttribute("departments", departments);
+        return "/registration/application-p";
+    }
+    @GetMapping("/createDepartment")
+    public String createDepartmentPage(Model model, HttpSession session) {
+        return "/registration/createDepartment";
+    }
+    @GetMapping("/attendanceRegister-p")
+    public String attendanceRegisterPage(Model model, HttpSession session) {
+        return "/registration/attendanceRegister-p";
+    }
 }

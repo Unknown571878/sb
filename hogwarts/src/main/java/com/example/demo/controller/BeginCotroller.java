@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Post;
+import com.example.demo.entity.Schedule;
 import com.example.demo.entity.Users;
 import com.example.demo.repository.GradeRepository;
 import com.example.demo.repository.PostRepository;
+import com.example.demo.repository.ScheduleRepository;
 import com.example.demo.repository.UsersRepository;
 import com.example.demo.service.*;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 
 @Controller
@@ -28,6 +32,7 @@ public class BeginCotroller {
     private final AuthService authService;
     private final GradeRepository gradeRepository;
     private final PostRepository postRepository;
+    private final ScheduleRepository scheduleRepository;
 
     private String showMessageAndRedirect(final MessageDto params, Model model) {
         model.addAttribute("params", params);
@@ -38,6 +43,19 @@ public class BeginCotroller {
     public String index(HttpSession session, Model model) {
         List<Post> posts = postRepository.findByTypeOrderByPidDesc("notice");
         model.addAttribute("posts", posts);
+
+        LocalDate currentDate = LocalDate.now();
+        int currentYear = currentDate.getYear();
+        int currentMonth = currentDate.getMonthValue();
+
+        // 현재 월의 첫 날과 마지막 날 계산
+        YearMonth yearMonth = YearMonth.of(currentYear, currentMonth);
+        LocalDate startOfMonth = yearMonth.atDay(1);
+        LocalDate endOfMonth = yearMonth.atEndOfMonth();
+
+        List<Schedule> schedules = scheduleRepository.findByScheduleDateAfter(startOfMonth);
+        model.addAttribute("schedules", schedules);
+
         if(session.getAttribute("authInfo") != null) {
             AuthInfo authInfo = (AuthInfo) session.getAttribute("authInfo");
             Users users = usersRepository.findById(authInfo.getId());

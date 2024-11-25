@@ -317,75 +317,35 @@ public class HogwartsApplication {
         postRepository.saveAll(noticeList);
 
         List<Schedule> ASchedules = Arrays.asList(
-                Schedule.builder()
-                        .title("1학기 수업 시작")
-                        .sYear("2024")
-                        .sMonth("03")
-                        .sDay("02")
-                        .build(),
+                Schedule.builder().title("1학기 개강").scheduleDate(LocalDate.of(2024, 3, 4)).build(),
+                Schedule.builder().title("1학기 수강 정정 기간").scheduleDate(LocalDate.of(2024, 3, 5)).build(),
+                Schedule.builder().title("1학기 수강 정정 마감").scheduleDate(LocalDate.of(2024, 3, 8)).build(),
+                Schedule.builder().title("1학기 중간고사 시작").scheduleDate(LocalDate.of(2024, 4, 22)).build(),
+                Schedule.builder().title("1학기 중간고사 종료").scheduleDate(LocalDate.of(2024, 4, 26)).build(),
+                Schedule.builder().title("1학기 기말고사 시작").scheduleDate(LocalDate.of(2024, 6, 17)).build(),
+                Schedule.builder().title("1학기 기말고사 종료").scheduleDate(LocalDate.of(2024, 6, 21)).build(),
+                Schedule.builder().title("1학기 종강").scheduleDate(LocalDate.of(2024, 6, 21)).build(),
 
-        Schedule.builder()
-                .title("2학기 수업 시작")
-                .sYear("2024")
-                .sMonth("09")
-                .sDay("01")
-                .build(),
+                // 방학 및 휴강
+                Schedule.builder().title("여름방학 시작").scheduleDate(LocalDate.of(2024, 6, 22)).build(),
+                Schedule.builder().title("광복절 휴강").scheduleDate(LocalDate.of(2024, 8, 15)).build(),
 
-        Schedule.builder()
-                .title("중간고사 기간")
-                .sYear("2024")
-                .sMonth("04")
-                .sDay("10")
-                .build(),
+                // 2학기 주요 일정
+                Schedule.builder().title("2학기 개강").scheduleDate(LocalDate.of(2024, 9, 2)).build(),
+                Schedule.builder().title("2학기 수강 정정 기간").scheduleDate(LocalDate.of(2024, 9, 3)).build(),
+                Schedule.builder().title("2학기 수강 정정 마감").scheduleDate(LocalDate.of(2024, 9, 6)).build(),
+                Schedule.builder().title("2학기 중간고사 시작").scheduleDate(LocalDate.of(2024, 10, 21)).build(),
+                Schedule.builder().title("2학기 중간고사 종료").scheduleDate(LocalDate.of(2024, 10, 25)).build(),
+                Schedule.builder().title("2학기 기말고사 시작").scheduleDate(LocalDate.of(2024, 12, 16)).build(),
+                Schedule.builder().title("2학기 기말고사 종료").scheduleDate(LocalDate.of(2024, 12, 20)).build(),
+                Schedule.builder().title("2학기 종강").scheduleDate(LocalDate.of(2024, 12, 20)).build(),
 
-        Schedule.builder()
-                .title("기말고사 기간")
-                .sYear("2024")
-                .sMonth("06")
-                .sDay("10")
-                .build(),
+                // 겨울방학
+                Schedule.builder().title("겨울방학 시작").scheduleDate(LocalDate.of(2024, 12, 21)).build(),
+                Schedule.builder().title("성탄절 휴강").scheduleDate(LocalDate.of(2024, 12, 25)).build(),
 
-        Schedule.builder()
-                .title("여름 방학 시작")
-                .sYear("2024")
-                .sMonth("06")
-                .sDay("20")
-                .build(),
-
-        Schedule.builder()
-                .title("겨울 방학 시작")
-                .sYear("2024")
-                .sMonth("12")
-                .sDay("20")
-                .build(),
-
-        Schedule.builder()
-                .title("신입생 오리엔테이션")
-                .sYear("2024")
-                .sMonth("02")
-                .sDay("25")
-                .build(),
-
-        Schedule.builder()
-                .title("종강일")
-                .sYear("2024")
-                .sMonth("06")
-                .sDay("15")
-                .build(),
-
-        Schedule.builder()
-                .title("학사일정 조정")
-                .sYear("2024")
-                .sMonth("05")
-                .sDay("10")
-                .build(),
-
-        Schedule.builder()
-                .title("교직원 회의")
-                .sYear("2024")
-                .sMonth("04")
-                .sDay("05")
-                .build()
+                // 졸업식
+                Schedule.builder().title("졸업식").scheduleDate(LocalDate.of(2024, 2, 15)).build()
         );
         AScheduleRepository.saveAll(ASchedules);
     }
