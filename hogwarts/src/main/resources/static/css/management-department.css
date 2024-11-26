@@ -1,0 +1,90 @@
+.split--div-post {
+    min-width: 1100px;
+    height: 2px;
+    background-color: gray;
+    margin: 20px 0 50px;
+}
+.main-title {
+    width: 80%;
+    margin: 20px auto;
+}
+.sub--menu--top {
+    text-align: center;
+    padding: 25px 0;
+    border-bottom: 3px solid #33688F;
+}
+.sub--menu--mid {
+    display: flex;
+    justify-content: center;
+}
+.sub--menu {
+    min-width: 230px;
+    margin-right: 80px;
+}
+.sub--menu--table {
+    border-color: #D1D5D4;
+    text-align: center;
+}
+.selected--menu,
+.sub--menu--table td a:hover {
+    color: #075AA4;
+    font-weight: 600;
+}
+.post-form {
+    width: 1500px;
+}
+
+
+
+/* 테이블 기본 스타일 */
+.table-custom {
+    width: 100%; /* 부모 컨테이너에 맞게 넓이 설정 */
+    border-collapse: collapse; /* 테두리 겹침 제거 */
+    margin: 20px auto; /* 가운데 정렬 및 여백 */
+    font-size: 14px; /* 텍스트 크기 */
+    text-align: left; /* 기본 텍스트 정렬 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+}
+
+.table-custom th, .table-custom td {
+    padding: 12px 15px; /* 셀 간격 */
+    border: 1px solid #D1D5D4; /* 셀 테두리 색 */
+}
+
+.table-custom th {
+    background-color: #33688F; /* 헤더 배경색 */
+    color: white; /* 헤더 텍스트 색상 */
+    font-weight: bold; /* 헤더 글자 강조 */
+}
+
+.table-custom tr:nth-child(even) {
+    background-color: #f9f9f9; /* 짝수 행 배경 */
+}
+
+.table-custom tr:hover {
+    background-color: #e6f7ff; /* 행에 마우스 오버 시 배경 */
+    transition: background-color 0.2s ease-in; /* 부드러운 전환 효과 */
+}
+
+/* 링크 스타일 */
+.table-custom td a {
+    color: #075AA4; /* 링크 기본 색상 */
+    text-decoration: none; /* 기본 밑줄 제거 */
+}
+
+.table-custom td a:hover {
+    text-decoration: underline; /* 호버 시 밑줄 표시 */
+    color: #333; /* 호버 시 색상 변경 */
+}
+
+.write-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff; /* 버튼 배경색 */
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}

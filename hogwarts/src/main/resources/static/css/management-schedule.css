@@ -1,0 +1,85 @@
+.split--div-post {
+    min-width: 1100px;
+    height: 2px;
+    background-color: gray;
+    margin: 20px 0 50px;
+}
+.main-title {
+    width: 80%;
+    margin: 20px auto;
+}
+.sub--menu--top {
+    text-align: center;
+    padding: 25px 0;
+    border-bottom: 3px solid #33688F;
+}
+.sub--menu--mid {
+    display: flex;
+    justify-content: center;
+}
+.sub--menu {
+    min-width: 230px;
+    margin-right: 80px;
+}
+.sub--menu--table {
+    border-color: #D1D5D4;
+    text-align: center;
+}
+.selected--menu,
+.sub--menu--table td a:hover {
+    color: #075AA4;
+    font-weight: 600;
+}
+.post-form {
+    width: 1500px;
+}
+/* 캘린더 헤더 */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.arrow-button {
+    cursor: pointer;
+    font-size: 18px;
+    padding: 5px 10px;
+    border: none;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.arrow-button:hover {
+    background-color: #ddd;
+}
+
+.nameAndButton {
+    width: 170px;
+}
+.item-line {
+    display: flex;
+    justify-content: space-between;
+}
+.schedule-input {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #007bff; /* 버튼 배경색 */
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+.write-button {
+    margin-left: 10px;
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #007bff; /* 버튼 배경색 */
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}

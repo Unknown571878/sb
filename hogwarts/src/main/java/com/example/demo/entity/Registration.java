@@ -30,5 +30,5 @@ public class Registration {
     @Builder.Default
     private int perception=0; //지각
     @Builder.Default
-    private int leave=0; //조퇴
+    private int early_leave=0; //조퇴
 }

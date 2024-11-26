@@ -53,7 +53,7 @@ public class BeginCotroller {
         LocalDate startOfMonth = yearMonth.atDay(1);
         LocalDate endOfMonth = yearMonth.atEndOfMonth();
 
-        List<Schedule> schedules = scheduleRepository.findByScheduleDateAfter(startOfMonth);
+        List<Schedule> schedules = scheduleRepository.findByScheduleDateAfterOrderByScheduleDate(startOfMonth);
         model.addAttribute("schedules", schedules);
 
         if(session.getAttribute("authInfo") != null) {

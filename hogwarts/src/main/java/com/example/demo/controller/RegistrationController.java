@@ -150,8 +150,8 @@ public class RegistrationController {
                             registration.setPerception(count + 1);
                             registrationRepository.save(registration);
                         } else if (value.equals("조퇴")) {
-                            int count = registration.getLeave();
-                            registration.setLeave(count + 1);
+                            int count = registration.getEarly_leave();
+                            registration.setEarly_leave(count + 1);
                             registrationRepository.save(registration);
                         } else if (value.equals("결석")) {
                             int count = registration.getAbsence();

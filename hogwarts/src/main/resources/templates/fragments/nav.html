@@ -31,6 +31,7 @@
                     <li th:if="${session.authInfo.job.equals('교수')}"><a href="/info/gradeList">성적</a>
                     <li th:if="${session.authInfo.job.equals('학생')}"><a href="/registration/registration-s">수강</a>
                     <li th:if="${session.authInfo.job.equals('교수')}"><a href="/registration/registration-p">강의</a>
+                    <li th:if="${session.authInfo.job.equals('관리자')}"><a href="/management/main">관리</a>
                     <li><a href="/post/notice">게시판</a>
                 </ul>
                 <ul th:if="${#lists.isEmpty(session.authInfo)}">

@@ -89,7 +89,7 @@
       <!-- 게시글 수정, 삭제, 목록으로 돌아가기 버튼 -->
       <div class="form-actions" th:if="${session.authInfo.uid.equals(post.userid) or session.authInfo.job.equals('관리자')}">
         <button onclick="window.location.href='/post/postList';">목록으로 돌아가기</button>
-        <form th:action="@{/post/postInsertForm/{pid}(pid=${post.pid})}" method="POST">
+        <form th:action="@{/post/postInsertForm/{pid}(pid=${post.pid})}" method="POST" th:if="${session.authInfo.uid.equals(post.userid)}">
           <button type="submit">수정</button>
         </form>
         <form th:action="@{/post/postDelete/{pid}(pid=${post.pid})}" method="POST" onsubmit="return confirm('정말 삭제하시겠습니까?');">
@@ -97,7 +97,7 @@
         </form>
       </div>
 
-      <div class="form-actions" th:if="${!session.authInfo.uid.equals(post.userid)}">
+      <div class="form-actions" th:if="${!session.authInfo.uid.equals(post.userid) and !session.authInfo.job.equals('관리자')}">
         <button onclick="window.location.href='/post/postList';">목록으로 돌아가기</button>
       </div>
 

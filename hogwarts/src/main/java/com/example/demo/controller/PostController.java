@@ -121,7 +121,7 @@ public class PostController {
         }
 
         // 일정 가져오기
-        List<Schedule> schedules = scheduleRepository.findByScheduleDateBetween(startOfMonth, endOfMonth);
+        List<Schedule> schedules = scheduleRepository.findByScheduleDateBetweenOrderByScheduleDate(startOfMonth, endOfMonth);
 
         // 이전/다음 월 계산
         LocalDate prevMonth = startOfMonth.minusMonths(1);
@@ -202,6 +202,7 @@ public class PostController {
         updatePost.setTitle(post.getTitle());
         updatePost.setContent(post.getContent());
         updatePost.setPid(post.getPid());
+        updatePost.setUpdateAt(LocalDateTime.now());
         postRepository.save(updatePost);
         MessageDto message = new MessageDto("수정되었습니다", "/post/postList", RequestMethod.GET, null);
         return showMessageAndRedirect(message, model);
@@ -225,6 +226,8 @@ public class PostController {
     @GetMapping("/noticeDetail")
     public String noticeDetail(@RequestParam("pid") Long pid, Model model) {
         Post post = postRepository.findById(pid).orElse(null);
+        post.setCnt(post.getCnt() + 1);
+        postRepository.save(post);
         model.addAttribute("post", post);
         return "/post/noticeDetail";
     }
@@ -233,6 +236,7 @@ public class PostController {
     public String inquiryList(Model model, @PageableDefault(page=0,size=20) Pageable pageable, HttpSession session) {
         AuthInfo authInfo = (AuthInfo) session.getAttribute("authInfo");
         List<Inquiry> posts = inquiryRepository.findByTypeAndUidOrderByPidDesc("question", authInfo.getId());
+        List<Inquiry> admin = inquiryRepository.findByTypeOrderByPidDesc("question");
         // 페이지 정보에 따라 현재 페이지의 시작 인덱스를 계산
         final int start = (int) pageable.getOffset();
         // 현재 페이지의 끝 인덱스를 계산하되, 목록 크기를 초과하지 않도록 함
@@ -240,6 +244,14 @@ public class PostController {
         // 현재 페이지의 아이템 서브리스트를 포함하는 Page 객체 생성
         final Page<Inquiry> page = new PageImpl<>(posts.subList(start, end), pageable, posts.size());
         // 페이지 객체를 모델에 추가하여 뷰에서 접근 가능하도록 함
+
+        // 현재 페이지의 끝 인덱스를 계산하되, 목록 크기를 초과하지 않도록 함
+        final int adminEnd = Math.min((start + pageable.getPageSize()), admin.size());
+        // 현재 페이지의 아이템 서브리스트를 포함하는 Page 객체 생성
+        final Page<Inquiry> adminPage = new PageImpl<>(admin.subList(start, adminEnd), pageable, admin.size());
+        // 페이지 객체를 모델에 추가하여 뷰에서 접근 가능하도록 함
+
+        model.addAttribute("adminPages", adminPage);
         model.addAttribute("inquirys", page);
         return "/post/inquiryList";
     }
@@ -274,5 +286,66 @@ public class PostController {
         model.addAttribute("inquirys", detail);
         model.addAttribute("main", main);
         return "/post/inquiryDetail";
+    }
+
+    @GetMapping("/noticeInsertForm")
+    public String noticeInsertForm() {
+        return "/post/noticeInsertForm";
+    }
+
+    @PostMapping("/noticeInsertForm/{pid}")
+    public String noticeInsertForm(@PathVariable Long pid, Model model) {
+        Post post = postRepository.findById(pid).orElse(null);
+        model.addAttribute("post", post);
+        return "/post/noticeInsertForm";
+    }
+
+    @PostMapping("/noticeDelete/{pid}")
+    public String noticeDelete(@PathVariable Long pid, Model model) {
+        postService.deletePost(pid);
+        MessageDto message = new MessageDto("삭제가 완료되었습니다", "/post/notice", RequestMethod.GET, null);
+        return showMessageAndRedirect(message, model);
+    }
+
+    @PostMapping("/noticeUpdate")
+    public String noticeUpdate(@ModelAttribute Post newPost, Model model) {
+        Post post = postRepository.findById(newPost.getPid()).orElse(null);
+        post.setTitle(newPost.getTitle());
+        post.setContent(newPost.getContent());
+        post.setName(newPost.getName());
+        post.setUpdateAt(LocalDateTime.now());
+        postRepository.save(post);
+        MessageDto message = new MessageDto("수정을 완료되었습니다", "/post/notice", RequestMethod.GET, null);
+        return showMessageAndRedirect(message, model);
+    }
+
+    @PostMapping("/noticeInsert")
+    public String noticeInsert(@ModelAttribute Post post, Model model) {
+        log.info(post.toString());
+        post.setCreatedAt(LocalDateTime.now());
+        post.setType("notice");
+        postRepository.save(post);
+        MessageDto message = new MessageDto("공지사항이 등록되었습니다", "/post/notice", RequestMethod.GET, null);
+        return showMessageAndRedirect(message, model);
+    }
+
+    @PostMapping("/answerInsert")
+    public String answerInsert(@RequestParam Long id,
+                               @RequestParam String content, Model model) {
+        Inquiry inquiry = inquiryRepository.findById(id).orElse(null);
+        Inquiry answer = Inquiry.builder()
+                .pid(inquiry.getId())
+                .title(inquiry.getTitle())
+                .content(content)
+                .name("관리자")
+                .createAt(LocalDate.now())
+                .type("answer")
+                .answer(true)
+                .build();
+        inquiryRepository.save(answer);
+        inquiry.setAnswer(true);
+        inquiryRepository.save(inquiry);
+        MessageDto message = new MessageDto("답글을 작성했습니다", "/post/inquiryDetail?id="+id, RequestMethod.GET, null);
+        return showMessageAndRedirect(message, model);
     }
 }

@@ -47,21 +47,30 @@
             <p th:text="${inquiry.content}"></p>
           </div>
         </div>
+        <div th:if="${session.authInfo.job.equals('관리자')}">
+          <form class="comments-section-form" action="/post/answerInsert" method="POST">
+            <input type="hidden" id="id" name="id" th:value="${main.id}">
+            <label for="content">답글 작성</label>
+            <textarea name="content" id="content" rows="3" required></textarea>
+            <button type="submit">답글 작성</button>
+          </form>
+        </div>
+<!--        수정해야함-->
+<!--        <div th:if="${session.authInfo.id.equals(main.uid)}">-->
+<!--          <form class="comments-section-form" action="/post/answerInsert" method="POST">-->
+<!--            <input type="hidden" id="id" name="id" th:value="${main.id}">-->
+<!--            <label for="content">답글 작성</label>-->
+<!--            <textarea name="content" id="content" rows="3" required></textarea>-->
+<!--            <button type="submit">답글 작성</button>-->
+<!--          </form>-->
+<!--        </div>-->
       <!-- 게시글 수정, 삭제, 목록으로 돌아가기 버튼 -->
-      <div class="form-actions" t>
+      <div class="form-actions">
         <button onclick="window.location.href='/post/postList';">목록으로 돌아가기</button>
         <form th:action="@{/post/postDelete/{pid}(pid=${main.id})}" method="POST" onsubmit="return confirm('정말 삭제하시겠습니까?');">
-          <button onclick="window.location.href='/post/postList';">목록으로 돌아가기</button>
           <button type="submit">삭제</button>
         </form>
       </div>
-        <div class="form-actions">
-          <button onclick="window.location.href='/post/postList';">목록으로 돌아가기</button>
-          <form th:action="@{/post/postDelete/{pid}(pid=${main.id})}" method="POST" onsubmit="return confirm('정말 삭제하시겠습니까?');">
-            <button onclick="window.location.href='/post/postList';">목록으로 돌아가기</button>
-            <button type="submit">삭제</button>
-          </form>
-        </div>
     </div>
   </div>
 </div>

@@ -32,7 +32,8 @@ public class Post {
     private LocalDateTime createdAt;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateAt;
-    private int cnt;
+    @Builder.Default
+    private int cnt=0;
 
     // 게시글에 달린 댓글 리스트
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

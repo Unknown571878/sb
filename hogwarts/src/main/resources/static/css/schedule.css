@@ -203,3 +203,11 @@
     background-color: gray;
     margin: 20px 0 50px;
 }
+
+.submenutable {
+    border-color: #D1D5D4;
+    width: 100%; /* 테이블 전체 너비 */
+    max-width: 600px; /* 테이블 최대 너비 */
+    border-collapse: collapse; /* 테두리 중첩 제거 */
+    text-align: left; /* 텍스트 정렬 */
+}
