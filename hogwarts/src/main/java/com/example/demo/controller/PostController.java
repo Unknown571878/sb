@@ -1,15 +1,9 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.Inquiry;
-import com.example.demo.repository.InquiryRepository;
+import com.example.demo.entity.*;
+import com.example.demo.repository.*;
 import com.example.demo.service.AuthInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.example.demo.entity.Schedule;
-import com.example.demo.entity.Comment;
-import com.example.demo.entity.Post;
-import com.example.demo.repository.CommentRepository;
-import com.example.demo.repository.PostRepository;
-import com.example.demo.repository.ScheduleRepository;
 import com.example.demo.service.MessageDto;
 import com.example.demo.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +41,7 @@ public class PostController {
     private final ScheduleRepository scheduleRepository;
 
     private final InquiryRepository inquiryRepository;
+    private final UsersRepository usersRepository;
 
     private String showMessageAndRedirect(final MessageDto params, Model model) {
         model.addAttribute("params", params);
@@ -281,7 +276,7 @@ public class PostController {
 
     @GetMapping("/inquiryDetail")
     public String inquiryDetail(@RequestParam("id") Long id, Model model) {
-        List<Inquiry> detail = inquiryRepository.findByPidAndTypeOrderByCreateAtDesc(id, "answer");
+        List<Inquiry> detail = inquiryRepository.findByPidAndTypeOrderByCreateAtAsc(id, "answer");
         Inquiry main = inquiryRepository.findById(id).orElse(null);
         model.addAttribute("inquirys", detail);
         model.addAttribute("main", main);
@@ -345,6 +340,26 @@ public class PostController {
         inquiryRepository.save(answer);
         inquiry.setAnswer(true);
         inquiryRepository.save(inquiry);
+        MessageDto message = new MessageDto("답글을 작성했습니다", "/post/inquiryDetail?id="+id, RequestMethod.GET, null);
+        return showMessageAndRedirect(message, model);
+    }
+
+    @PostMapping("/reQuestionInsert")
+    public String reQuestionInsert(@RequestParam Long id,
+                                   @RequestParam String content,
+                                   Model model) {
+        Inquiry inquiry = inquiryRepository.findById(id).orElse(null);
+        Inquiry answer = Inquiry.builder()
+                .pid(inquiry.getId())
+                .title(inquiry.getTitle())
+                .uid(inquiry.getUid())
+                .content(content)
+                .name(inquiry.getName())
+                .createAt(LocalDate.now())
+                .type("answer")
+                .answer(true)
+                .build();
+        inquiryRepository.save(answer);
         MessageDto message = new MessageDto("답글을 작성했습니다", "/post/inquiryDetail?id="+id, RequestMethod.GET, null);
         return showMessageAndRedirect(message, model);
     }

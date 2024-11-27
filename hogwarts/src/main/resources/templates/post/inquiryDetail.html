@@ -39,12 +39,15 @@
           <span th:text="'작성자: ' + ${main.name}">작성자</span>|
           <span th:text="'작성일: ' + ${#temporals.format(main.createAt, 'yyyy-MM-dd HH:mm:ss')}">작성일</span>
         </p>
-        <div class="post-content">
-          <p th:text="${main.content}">게시글 내용</p>
+        <div>
+          <p th:text="${main.content}" class="message-box user-message">게시글 내용</p>
         </div>
         <div th:each="inquiry : ${inquirys}" th:if="${inquirys != null}">
-          <div class="post-content" style="text-align: right">
-            <p th:text="${inquiry.content}"></p>
+          <div th:if="${inquiry.uid != null}">
+            <p th:text="${inquiry.content}" class="message-box user-message"></p>
+          </div>
+          <div th:if="${inquiry.uid == null}">
+            <p th:text="${inquiry.content}" class="message-box admin-message"></p>
           </div>
         </div>
         <div th:if="${session.authInfo.job.equals('관리자')}">
@@ -55,15 +58,14 @@
             <button type="submit">답글 작성</button>
           </form>
         </div>
-<!--        수정해야함-->
-<!--        <div th:if="${session.authInfo.id.equals(main.uid)}">-->
-<!--          <form class="comments-section-form" action="/post/answerInsert" method="POST">-->
-<!--            <input type="hidden" id="id" name="id" th:value="${main.id}">-->
-<!--            <label for="content">답글 작성</label>-->
-<!--            <textarea name="content" id="content" rows="3" required></textarea>-->
-<!--            <button type="submit">답글 작성</button>-->
-<!--          </form>-->
-<!--        </div>-->
+        <div th:if="${session.authInfo.id.equals(main.uid)}">
+          <form class="comments-section-form" action="/post/reQuestionInsert" method="POST">
+            <input type="hidden" id="id" name="id" th:value="${main.id}">
+            <label for="content">답글 작성</label>
+            <textarea name="content" id="content" rows="3" required></textarea>
+            <button type="submit">답글 작성</button>
+          </form>
+        </div>
       <!-- 게시글 수정, 삭제, 목록으로 돌아가기 버튼 -->
       <div class="form-actions">
         <button onclick="window.location.href='/post/postList';">목록으로 돌아가기</button>

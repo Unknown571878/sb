@@ -67,6 +67,38 @@ body {
     border-radius: 8px;
 }
 
+/* 공통 스타일 */
+.message-box {
+    padding: 10px;            /* 안쪽 여백 */
+    border-radius: 10px;      /* 모서리 둥글게 */
+    margin: 10px 0;           /* 위아래 여백 */
+    width: 45%;               /* 상자 너비 */
+    min-height: 100px;        /* 최소 높이 */
+    word-wrap: break-word;    /* 긴 단어 줄바꿈 */
+    box-sizing: border-box;   /* 테두리와 패딩 포함 */
+    position: relative;       /* 텍스트 배치 조정 */
+    display: block;           /* 블록 요소 유지 */
+    vertical-align: top;      /* 텍스트 위쪽 정렬 */
+}
+
+/* 사용자가 적은 글 */
+.user-message {
+    background-color: #007BFF; /* 파란 배경 */
+    color: #ffffff;           /* 흰색 텍스트 */
+    text-align: left;         /* 텍스트 왼쪽 정렬 */
+    margin-left: 0;           /* 왼쪽에 붙음 */
+    margin-right: auto;       /* 오른쪽 여백 자동 */
+}
+
+/* 다른 사람이 적은 글 */
+.admin-message {
+    background-color: #FFD700; /* 노란 배경 */
+    color: #000000;            /* 검은 텍스트 */
+    text-align: right;         /* 텍스트 오른쪽 정렬 */
+    margin-left: auto;         /* 왼쪽 여백 자동 */
+    margin-right: 0;           /* 오른쪽에 붙음 */
+    direction: rtl;            /* 오른쪽 끝에 글자 붙이기 */
+}
 
 
 .post-content p {
