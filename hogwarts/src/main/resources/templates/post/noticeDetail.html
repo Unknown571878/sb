@@ -45,7 +45,7 @@
       </div>
 
       <!-- 게시글 수정, 삭제, 목록으로 돌아가기 버튼 -->
-      <div class="form-actions" th:if="${session.authInfo.uid.equals(post.userid) or session.authInfo.job.equals('관리자')}">
+      <div class="form-actions" th:if="${job.equals('관리자')}">
         <button onclick="window.location.href='/post/notice';">목록으로 돌아가기</button>
         <form th:action="@{/post/noticeInsertForm/{pid}(pid=${post.pid})}" method="POST">
           <button type="submit">수정</button>
@@ -55,7 +55,7 @@
         </form>
       </div>
 
-      <div class="form-actions" th:if="${!session.authInfo.uid.equals(post.userid)}">
+      <div class="form-actions" th:if="${!job.equals('관리자')}">
         <button onclick="window.location.href='/post/notice';">목록으로 돌아가기</button>
       </div>
 

@@ -97,3 +97,10 @@ body {
 		width: 90%;
 	}
 }
+
+.logo {
+	width: 320px;
+	height: 80px;
+	margin: 5px 50px 5px 10px;
+
+}

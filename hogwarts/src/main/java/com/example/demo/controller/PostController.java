@@ -49,7 +49,15 @@ public class PostController {
     }
 
     @GetMapping("/notice")
-    public String notice(Model model, @PageableDefault(page=0,size=20) Pageable pageable) {
+    public String notice(Model model, @PageableDefault(page=0,size=20) Pageable pageable, HttpSession session) {
+        if (session.getAttribute("authInfo") != null) {
+            AuthInfo authInfo = (AuthInfo) session.getAttribute("authInfo");
+            log.info(authInfo.toString());
+            model.addAttribute("job", authInfo.getJob());
+        }
+        else {
+            model.addAttribute("job", "guest");
+        }
         List<Post> posts = postRepository.findByTypeOrderByPidDesc("notice");
         // 페이지 정보에 따라 현재 페이지의 시작 인덱스를 계산
         final int start = (int) pageable.getOffset();
@@ -63,8 +71,12 @@ public class PostController {
     }
 
     @GetMapping("/postList")
-    public String postList(Model model, @PageableDefault(page=0,size=20) Pageable pageable) {
+    public String postList(Model model, @PageableDefault(page=0,size=20) Pageable pageable, HttpSession session) {
         List<Post> posts = postRepository.findByTypeOrderByPidDesc("free");
+        if(session.getAttribute("authInfo") == null) {
+            MessageDto message = new MessageDto("로그인이 필요한 서비스입니다", "/loginForm", RequestMethod.GET, null);
+            return showMessageAndRedirect(message, model);
+        }
         // 페이지 정보에 따라 현재 페이지의 시작 인덱스를 계산
         final int start = (int) pageable.getOffset();
         // 현재 페이지의 끝 인덱스를 계산하되, 목록 크기를 초과하지 않도록 함
@@ -219,7 +231,15 @@ public class PostController {
     }
 
     @GetMapping("/noticeDetail")
-    public String noticeDetail(@RequestParam("pid") Long pid, Model model) {
+    public String noticeDetail(@RequestParam("pid") Long pid, Model model, HttpSession session) {
+        if (session.getAttribute("authInfo") != null) {
+            AuthInfo authInfo = (AuthInfo) session.getAttribute("authInfo");
+            log.info(authInfo.toString());
+            model.addAttribute("job", authInfo.getJob());
+        }
+        else {
+            model.addAttribute("job", "guest");
+        }
         Post post = postRepository.findById(pid).orElse(null);
         post.setCnt(post.getCnt() + 1);
         postRepository.save(post);
@@ -229,6 +249,10 @@ public class PostController {
 
     @GetMapping("/inquiryList")
     public String inquiryList(Model model, @PageableDefault(page=0,size=20) Pageable pageable, HttpSession session) {
+        if(session.getAttribute("authInfo") == null) {
+            MessageDto message = new MessageDto("로그인이 필요한 서비스입니다", "/loginForm", RequestMethod.GET, null);
+            return showMessageAndRedirect(message, model);
+        }
         AuthInfo authInfo = (AuthInfo) session.getAttribute("authInfo");
         List<Inquiry> posts = inquiryRepository.findByTypeAndUidOrderByPidDesc("question", authInfo.getId());
         List<Inquiry> admin = inquiryRepository.findByTypeOrderByPidDesc("question");

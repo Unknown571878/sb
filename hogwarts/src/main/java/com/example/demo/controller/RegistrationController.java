@@ -45,6 +45,10 @@ public class RegistrationController {
 
     @GetMapping("/registration-s")
     public String registration_sPage(HttpSession session, Model model) {
+        if(session.getAttribute("authInfo") == null) {
+            MessageDto message = new MessageDto("로그인이 필요한 서비스입니다", "/loginForm", RequestMethod.GET, null);
+            return showMessageAndRedirect(message, model);
+        }
         AuthInfo authInfo = (AuthInfo)session.getAttribute("authInfo");
         List<Registration> registrations = registrationRepository.findAll();
         List<Department> departments = new ArrayList<>();

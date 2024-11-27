@@ -12,6 +12,7 @@ import com.example.demo.service.AuthInfo;
 import com.example.demo.service.GradeService;
 import com.example.demo.service.MessageDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,7 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class GradeController {
 
     private final GradeRepository gradeRepository;
@@ -44,8 +46,12 @@ public class GradeController {
     public String grade(@RequestParam(required = false) String year,
                         @RequestParam(required = false) String term,
                         HttpSession session, Model model) {
-        if(session.getAttribute("authInfo") != null) {
+        if(session.getAttribute("authInfo") == null) {
+            MessageDto message = new MessageDto("로그인이 필요한 서비스입니다", "/loginForm", RequestMethod.GET, null);
+            return showMessageAndRedirect(message, model);
+        } else {
             AuthInfo authInfo = (AuthInfo) session.getAttribute("authInfo");
+            log.info(authInfo.toString());
             List<String> years = gradeService.getAllYears(authInfo.getId()); // 접속한 학생의 데이터를 검색해 데이터가 존재하는 학기와 학년을 가져옴
             List<String> terms = gradeService.getAllTerms(authInfo.getId());
             model.addAttribute("years", years);
@@ -60,15 +66,16 @@ public class GradeController {
             }
             Map<String, Double> overallStats = gradeService.calculateOverallStatistics(authInfo.getId());
             model.addAttribute("overallStats", overallStats);
-        } else {
-            MessageDto message = new MessageDto("로그인이 필요한 서비스입니다", "/loginForm", RequestMethod.GET, null);
-            return showMessageAndRedirect(message, model);
         }
         return "/info/grade";
     }
 
     @GetMapping("/info/gradeList")
     public String gradeList(Model model, HttpSession session){
+        if(session.getAttribute("authInfo") == null) {
+            MessageDto message = new MessageDto("로그인이 필요한 서비스입니다", "/loginForm", RequestMethod.GET, null);
+            return showMessageAndRedirect(message, model);
+        }
         AuthInfo authInfo = (AuthInfo) session.getAttribute("authInfo");
         List<Department> departments = departmentRepository.findByProfessorAndPermission(authInfo.getId(), true);
         model.addAttribute("departments", departments);
