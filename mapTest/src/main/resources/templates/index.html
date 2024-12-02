@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Maps 주변 공공시설 검색</title>
+  <script
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuciS5V0LMGBLJIF0ufEVIRfg9VVPuW3A&libraries=places"
+          async
+          defer>
+  </script>
+  <style>
+    #map {
+      height: 700px;
+      width: 1000px;
+    }
+    #search-container {
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+<div id="search-container">
+  <input type="text" id="search-box" placeholder="검색할 지역 입력" />
+  <button onclick="searchLocation()">검색</button>
+  <br><br>
+  <label for="facility-select">공공시설 유형 선택:</label>
+  <select id="facility-select" onchange="searchLocation()">
+    <option value="library">도서관</option>
+    <option value="hospital">병원</option>
+    <option value="police">경찰서</option>
+    <option value="fire_station">소방서</option>
+    <option value="school">학교</option>
+    <option value="bus_station">버스정류장</option>
+    <option value="subway_station">지하철역</option>
+  </select>
+</div>
+<div id="map"></div>
+
+<script>
+  let map;
+  let markers = [];
+  let service;
+  let infoWindow;
+
+  function initMap() {
+    // 지도 초기화
+    const initialLocation = { lat: 37.5665, lng: 126.9780 }; // 기본 위치: 서울
+    map = new google.maps.Map(document.getElementById("map"), {
+      zoom: 10,
+      center: initialLocation,
+    });
+    infoWindow = new google.maps.InfoWindow();
+    service = new google.maps.places.PlacesService(map);
+  }
+
+  function searchLocation() {
+    const searchBox = document.getElementById("search-box").value;
+
+    if (!searchBox) {
+      alert("검색할 지역을 입력하세요.");
+      return;
+    }
+
+    // Place Search 요청
+    const request = {
+      query: searchBox,
+      fields: ["geometry", "name", "place_id"],
+    };
+
+    service.findPlaceFromQuery(request, (results, status) => {
+      if (status === google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
+        const place = results[0];
+
+        // 지도 이동 및 마커 추가
+        const location = place.geometry.location;
+        map.setCenter(location);
+        map.setZoom(15);
+
+        // 주변 공공시설 검색
+        searchNearbyPublicFacilities(location);
+      } else {
+        alert("검색에 실패했습니다: " + status);
+      }
+    });
+  }
+
+  // 주변 공공시설 검색
+  function searchNearbyPublicFacilities(location) {
+    const facilityType = document.getElementById("facility-select").value; // 선택된 공공시설 유형 가져오기
+    const request = {
+      location: location,
+      radius: 2000, // 2km 이내의 공공시설 검색
+      type: [facilityType], // 선택된 공공시설 유형에 따라 검색
+    };
+
+    service.nearbySearch(request, (results, status) => {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        // 이전 마커 삭제
+        clearMarkers();
+
+        // 검색된 공공시설을 지도에 마커로 표시
+        results.forEach((place) => {
+          const marker = new google.maps.Marker({
+            map: map,
+            position: place.geometry.location,
+            title: place.name,
+          });
+
+          // 마커 클릭 시 InfoWindow 표시
+          google.maps.event.addListener(marker, 'click', function() {
+            const content = `
+              <div>
+                <h3>${place.name}</h3>
+                <p>위치: ${place.vicinity || '정보 없음'}</p>
+                <p>장소 ID: ${place.place_id}</p>
+              </div>
+            `;
+            infoWindow.setContent(content);
+            infoWindow.open(map, marker);
+          });
+
+          // 마커 배열에 추가
+          markers.push(marker);
+        });
+      } else {
+        alert("주변 공공시설 검색에 실패했습니다: " + status);
+      }
+    });
+  }
+
+  // 마커가 여러 개일 경우 모두 삭제하는 함수
+  function clearMarkers() {
+    markers.forEach(marker => {
+      marker.setMap(null);
+    });
+    markers = []; // 마커 배열 초기화
+  }
+
+  // 페이지 로드 시 지도 초기화
+  window.onload = initMap;
+</script>
+</body>
+</html>

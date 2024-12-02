@@ -89,7 +89,7 @@ public class BeginCotroller {
     }
 
     @PostMapping("/login")
-    public String login(LoginCommand loginCommand, HttpSession session, Errors errors, HttpServletResponse response) {
+    public String login(LoginCommand loginCommand, HttpSession session, Errors errors, HttpServletResponse response, Model model) {
 
         new LoginCommandValidator().validate(loginCommand, errors);
         if (errors.hasErrors()) {
@@ -112,7 +112,8 @@ public class BeginCotroller {
             return "redirect:/";
         }catch (WrongIdPasswordException e) {
             errors.reject("idPasswordNotMatching");
-            return "/loginForm";
+            MessageDto message = new MessageDto("로그인에 실패하였습니다", "/loginForm", RequestMethod.GET, null);
+            return showMessageAndRedirect(message, model);
         }
     }
 
