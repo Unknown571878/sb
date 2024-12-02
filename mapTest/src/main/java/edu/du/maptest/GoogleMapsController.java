@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class GoogleMapsController {
-    private static final String API_KEY = "AIzaSyCuciS5V0LMGBLJIF0ufEVIRfg9VVPuW3A";
+    private static final String API_KEY = "api";
 
     @GetMapping("/geocode")
     public String getGeocode(@RequestParam String address) {
